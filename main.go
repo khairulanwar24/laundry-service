@@ -4,7 +4,10 @@ import (
 	"log"
 	"net"
 	"os"
+	"sso-service/controllers"
 	"sso-service/database"
+	"sso-service/repositories"
+	"sso-service/services"
 
 	grpcsso "sso-service/grpc"
 	"sso-service/routes"
@@ -57,7 +60,13 @@ func main() {
 		// AllowCredentials: true, // Jika ingin mengizinkan cookies
 	}))
 
-	// Set up routes
+	// Dependency injection untuk domain yang sudah dimigrasi ke pola berlapis (registry).
+	repository := repositories.NewRepositoryRegistry(database.DB, database.DBAkademik, database.DBDigiclass)
+	service := services.NewServiceRegistry(repository)
+	controller := controllers.NewControllerRegistry(service)
+	routes.NewRouteRegistry(controller, app).Serve()
+
+	// Set up routes (domain lama yang belum dimigrasi)
 	routes.SetupRoutes(app)
 
 	// Jalankan Fiber di goroutine
