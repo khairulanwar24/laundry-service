@@ -7,7 +7,7 @@ import (
 func SetupRoutes(app *fiber.App) {
 
 	SetupAuthRoutes(app)
-	SetupUserRoutes(app)
+	// SetupUserRoutes dipindah ke pola berlapis (routes/user) & didaftarkan via NewRouteRegistry di main.go
 	SetupMasterRoutes(app)
 	SetupMstGrupAksesRoutes(app)
 	SetupMstMenuRoutes(app)

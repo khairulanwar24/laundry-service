@@ -4,6 +4,7 @@ package services
 import (
 	"sso-service/repositories"
 	refService "sso-service/services/ref"
+	userService "sso-service/services/user"
 )
 
 // Registry menyimpan repository registry sebagai dependency.
@@ -14,6 +15,7 @@ type Registry struct {
 // IServiceRegistry adalah kontrak untuk mengambil service per-domain.
 type IServiceRegistry interface {
 	GetRef() refService.IRefService
+	GetUser() userService.IUserService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -24,4 +26,9 @@ func NewServiceRegistry(repository repositories.IRepositoryRegistry) IServiceReg
 // GetRef mengembalikan service referensi.
 func (r *Registry) GetRef() refService.IRefService {
 	return refService.NewRefService(r.repository)
+}
+
+// GetUser mengembalikan service user.
+func (r *Registry) GetUser() userService.IUserService {
+	return userService.NewUserService(r.repository)
 }

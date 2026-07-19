@@ -5,6 +5,7 @@ package controllers
 
 import (
 	refController "sso-service/controllers/ref"
+	userController "sso-service/controllers/user"
 	"sso-service/services"
 )
 
@@ -16,6 +17,7 @@ type Registry struct {
 // IControllerRegistry adalah kontrak untuk mengambil controller per-domain.
 type IControllerRegistry interface {
 	GetRef() refController.IRefController
+	GetUser() userController.IUserController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -26,4 +28,9 @@ func NewControllerRegistry(service services.IServiceRegistry) IControllerRegistr
 // GetRef mengembalikan controller referensi.
 func (r *Registry) GetRef() refController.IRefController {
 	return refController.NewRefController(r.service)
+}
+
+// GetUser mengembalikan controller user.
+func (r *Registry) GetUser() userController.IUserController {
+	return userController.NewUserController(r.service)
 }

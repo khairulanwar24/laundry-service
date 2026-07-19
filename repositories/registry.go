@@ -4,6 +4,7 @@ package repositories
 
 import (
 	refRepo "sso-service/repositories/ref"
+	userRepo "sso-service/repositories/user"
 
 	"gorm.io/gorm"
 )
@@ -21,6 +22,7 @@ type Registry struct {
 // IRepositoryRegistry adalah kontrak untuk mengambil repository per-domain.
 type IRepositoryRegistry interface {
 	GetRef() refRepo.IRefRepository
+	GetUser() userRepo.IUserRepository
 }
 
 // NewRepositoryRegistry membuat registry baru dengan ketiga koneksi database.
@@ -31,4 +33,9 @@ func NewRepositoryRegistry(db, dbAkademik, dbDigiclass *gorm.DB) IRepositoryRegi
 // GetRef mengembalikan repository referensi (memakai koneksi akademik).
 func (r *Registry) GetRef() refRepo.IRefRepository {
 	return refRepo.NewRefRepository(r.dbAkademik)
+}
+
+// GetUser mengembalikan repository user (memakai ketiga koneksi database).
+func (r *Registry) GetUser() userRepo.IUserRepository {
+	return userRepo.NewUserRepository(r.db, r.dbAkademik, r.dbDigiclass)
 }

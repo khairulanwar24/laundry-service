@@ -15,8 +15,8 @@ type Config struct {
 
 func LoadConfig() Config {
 	return Config{
-		DBHost:     getEnv("DB_HOST", "192.168.20.12"),
-		DBPort:     getEnv("DB_PORT", "5432"),
+		DBHost:     getEnv("DB_HOST", "rdp.farmasiunissula.com"),
+		DBPort:     getEnv("DB_PORT", "2345"),
 		DBUser:     getEnv("DB_USER", "sso"),
 		DBPassword: getEnv("DB_PASSWORD", "sso-farmasi-2024"),
 		DBName:     getEnv("DB_NAME", "sso"),
@@ -26,8 +26,8 @@ func LoadConfig() Config {
 
 func LoadConfigAkademik() Config {
 	return Config{
-		DBHost:     getEnv("DB_HOST", "192.168.20.12"),
-		DBPort:     getEnv("DB_PORT", "5432"),
+		DBHost:     getEnv("DB_HOST", "rdp.farmasiunissula.com"),
+		DBPort:     getEnv("DB_PORT", "2345"),
 		DBUser:     getEnv("DB_USER", "akademikfarmasi"),
 		DBPassword: getEnv("DB_PASSWORD", "ff2024**1234"),
 		DBName:     getEnv("DB_NAME", "akademik"),
@@ -37,8 +37,8 @@ func LoadConfigAkademik() Config {
 
 func LoadConfigDigiclass() Config {
 	return Config{
-		DBHost:     getEnv("DB_HOST", "192.168.20.12"),
-		DBPort:     getEnv("DB_PORT", "5432"),
+		DBHost:     getEnv("DB_HOST", "rdp.farmasiunissula.com"),
+		DBPort:     getEnv("DB_PORT", "2345"),
 		DBUser:     getEnv("DB_USER", "digiclass"),
 		DBPassword: getEnv("DB_PASSWORD", "digiclasfarmasi2025**"),
 		DBName:     getEnv("DB_NAME", "digiclass"),

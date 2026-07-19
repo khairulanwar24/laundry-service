@@ -212,20 +212,7 @@ func CekOtp(c *fiber.Ctx) error {
 	return c.JSON(data)
 }
 
-func GenerateUserMahasiswa(c *fiber.Ctx) error {
-	mahasiswa := models.GenerateUserMahasiswa()
-	return c.JSON(mahasiswa)
-}
-
-func GenerateUserDosen(c *fiber.Ctx) error {
-	dosen := models.GenerateUserDosen()
-	return c.JSON(dosen)
-}
-
-func GenerateUserTendik(c *fiber.Ctx) error {
-	tendik := models.GenerateUserTendik()
-	return c.JSON(tendik)
-}
+// GenerateUserMahasiswa/Dosen/Tendik dipindah ke domain user (controllers/user, services/user).
 
 func RefreshToken(c *fiber.Ctx) error {
 	var resp types.Response

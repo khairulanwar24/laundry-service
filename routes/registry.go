@@ -6,6 +6,7 @@ package routes
 import (
 	"sso-service/controllers"
 	refRoute "sso-service/routes/ref"
+	userRoute "sso-service/routes/user"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,8 +30,13 @@ func NewRouteRegistry(controller controllers.IControllerRegistry, router fiber.R
 // Serve mendaftarkan seluruh rute domain yang telah dimigrasi ke pola berlapis.
 func (r *Registry) Serve() {
 	r.refRoute().Run()
+	r.userRoute().Run()
 }
 
 func (r *Registry) refRoute() refRoute.IRefRoute {
 	return refRoute.NewRefRoute(r.controller, r.router)
+}
+
+func (r *Registry) userRoute() userRoute.IUserRoute {
+	return userRoute.NewUserRoute(r.controller, r.router)
 }
