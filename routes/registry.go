@@ -5,6 +5,7 @@ package routes
 
 import (
 	"sso-service/controllers"
+	masterAppRoute "sso-service/routes/masterapp"
 	refRoute "sso-service/routes/ref"
 	userRoute "sso-service/routes/user"
 
@@ -31,6 +32,7 @@ func NewRouteRegistry(controller controllers.IControllerRegistry, router fiber.R
 func (r *Registry) Serve() {
 	r.refRoute().Run()
 	r.userRoute().Run()
+	r.masterAppRoute().Run()
 }
 
 func (r *Registry) refRoute() refRoute.IRefRoute {
@@ -39,4 +41,8 @@ func (r *Registry) refRoute() refRoute.IRefRoute {
 
 func (r *Registry) userRoute() userRoute.IUserRoute {
 	return userRoute.NewUserRoute(r.controller, r.router)
+}
+
+func (r *Registry) masterAppRoute() masterAppRoute.IMasterAppRoute {
+	return masterAppRoute.NewMasterAppRoute(r.controller, r.router)
 }

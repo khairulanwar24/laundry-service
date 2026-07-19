@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	masterAppController "sso-service/controllers/masterapp"
 	refController "sso-service/controllers/ref"
 	userController "sso-service/controllers/user"
 	"sso-service/services"
@@ -18,6 +19,7 @@ type Registry struct {
 type IControllerRegistry interface {
 	GetRef() refController.IRefController
 	GetUser() userController.IUserController
+	GetMasterApp() masterAppController.IMasterAppController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -33,4 +35,9 @@ func (r *Registry) GetRef() refController.IRefController {
 // GetUser mengembalikan controller user.
 func (r *Registry) GetUser() userController.IUserController {
 	return userController.NewUserController(r.service)
+}
+
+// GetMasterApp mengembalikan controller master aplikasi.
+func (r *Registry) GetMasterApp() masterAppController.IMasterAppController {
+	return masterAppController.NewMasterAppController(r.service)
 }

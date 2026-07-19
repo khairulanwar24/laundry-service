@@ -3,6 +3,7 @@ package services
 
 import (
 	"sso-service/repositories"
+	masterAppService "sso-service/services/masterapp"
 	refService "sso-service/services/ref"
 	userService "sso-service/services/user"
 )
@@ -16,6 +17,7 @@ type Registry struct {
 type IServiceRegistry interface {
 	GetRef() refService.IRefService
 	GetUser() userService.IUserService
+	GetMasterApp() masterAppService.IMasterAppService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -31,4 +33,9 @@ func (r *Registry) GetRef() refService.IRefService {
 // GetUser mengembalikan service user.
 func (r *Registry) GetUser() userService.IUserService {
 	return userService.NewUserService(r.repository)
+}
+
+// GetMasterApp mengembalikan service master aplikasi.
+func (r *Registry) GetMasterApp() masterAppService.IMasterAppService {
+	return masterAppService.NewMasterAppService(r.repository)
 }
