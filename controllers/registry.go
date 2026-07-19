@@ -5,6 +5,7 @@ package controllers
 
 import (
 	masterAppController "sso-service/controllers/masterapp"
+	mstMenuController "sso-service/controllers/mstmenu"
 	refController "sso-service/controllers/ref"
 	userController "sso-service/controllers/user"
 	"sso-service/services"
@@ -20,6 +21,7 @@ type IControllerRegistry interface {
 	GetRef() refController.IRefController
 	GetUser() userController.IUserController
 	GetMasterApp() masterAppController.IMasterAppController
+	GetMstMenu() mstMenuController.IMstMenuController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -40,4 +42,9 @@ func (r *Registry) GetUser() userController.IUserController {
 // GetMasterApp mengembalikan controller master aplikasi.
 func (r *Registry) GetMasterApp() masterAppController.IMasterAppController {
 	return masterAppController.NewMasterAppController(r.service)
+}
+
+// GetMstMenu mengembalikan controller master menu & modul.
+func (r *Registry) GetMstMenu() mstMenuController.IMstMenuController {
+	return mstMenuController.NewMstMenuController(r.service)
 }

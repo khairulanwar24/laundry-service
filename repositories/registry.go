@@ -4,6 +4,7 @@ package repositories
 
 import (
 	masterAppRepo "sso-service/repositories/masterapp"
+	mstMenuRepo "sso-service/repositories/mstmenu"
 	refRepo "sso-service/repositories/ref"
 	userRepo "sso-service/repositories/user"
 
@@ -25,6 +26,7 @@ type IRepositoryRegistry interface {
 	GetRef() refRepo.IRefRepository
 	GetUser() userRepo.IUserRepository
 	GetMasterApp() masterAppRepo.IMasterAppRepository
+	GetMstMenu() mstMenuRepo.IMstMenuRepository
 }
 
 // NewRepositoryRegistry membuat registry baru dengan ketiga koneksi database.
@@ -45,4 +47,9 @@ func (r *Registry) GetUser() userRepo.IUserRepository {
 // GetMasterApp mengembalikan repository master aplikasi (koneksi utama).
 func (r *Registry) GetMasterApp() masterAppRepo.IMasterAppRepository {
 	return masterAppRepo.NewMasterAppRepository(r.db)
+}
+
+// GetMstMenu mengembalikan repository master menu & modul (koneksi utama).
+func (r *Registry) GetMstMenu() mstMenuRepo.IMstMenuRepository {
+	return mstMenuRepo.NewMstMenuRepository(r.db)
 }

@@ -6,6 +6,7 @@ package routes
 import (
 	"sso-service/controllers"
 	masterAppRoute "sso-service/routes/masterapp"
+	mstMenuRoute "sso-service/routes/mstmenu"
 	refRoute "sso-service/routes/ref"
 	userRoute "sso-service/routes/user"
 
@@ -33,6 +34,7 @@ func (r *Registry) Serve() {
 	r.refRoute().Run()
 	r.userRoute().Run()
 	r.masterAppRoute().Run()
+	r.mstMenuRoute().Run()
 }
 
 func (r *Registry) refRoute() refRoute.IRefRoute {
@@ -45,4 +47,8 @@ func (r *Registry) userRoute() userRoute.IUserRoute {
 
 func (r *Registry) masterAppRoute() masterAppRoute.IMasterAppRoute {
 	return masterAppRoute.NewMasterAppRoute(r.controller, r.router)
+}
+
+func (r *Registry) mstMenuRoute() mstMenuRoute.IMstMenuRoute {
+	return mstMenuRoute.NewMstMenuRoute(r.controller, r.router)
 }

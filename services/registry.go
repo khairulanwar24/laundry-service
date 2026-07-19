@@ -4,6 +4,7 @@ package services
 import (
 	"sso-service/repositories"
 	masterAppService "sso-service/services/masterapp"
+	mstMenuService "sso-service/services/mstmenu"
 	refService "sso-service/services/ref"
 	userService "sso-service/services/user"
 )
@@ -18,6 +19,7 @@ type IServiceRegistry interface {
 	GetRef() refService.IRefService
 	GetUser() userService.IUserService
 	GetMasterApp() masterAppService.IMasterAppService
+	GetMstMenu() mstMenuService.IMstMenuService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -38,4 +40,9 @@ func (r *Registry) GetUser() userService.IUserService {
 // GetMasterApp mengembalikan service master aplikasi.
 func (r *Registry) GetMasterApp() masterAppService.IMasterAppService {
 	return masterAppService.NewMasterAppService(r.repository)
+}
+
+// GetMstMenu mengembalikan service master menu & modul.
+func (r *Registry) GetMstMenu() mstMenuService.IMstMenuService {
+	return mstMenuService.NewMstMenuService(r.repository)
 }
