@@ -15,19 +15,42 @@ type GroupAksesService struct {
 
 // IGroupAksesService adalah kontrak logika bisnis domain group akses.
 type IGroupAksesService interface {
-	CreateMstGroupAkses(ctx context.Context, idMasterAplikasi, namaGroup, deskripsi string) response.Response
+	CreateMstGroupAkses(
+		ctx context.Context,
+		idMasterAplikasi,
+		namaGroup,
+		deskripsi string,
+	) response.Response
 	GetMstGroupAkses(idMasterAplikasi string, limit, offset int, order, filter string) response.Response
 	GetMstGroupAksesModul(idMasterAplikasi, idMasterGroup string, limit, offset int, order, filter string) response.Response
 	GetGroupAkses(idMasterGroup string, limit, offset int, order, filter string) response.Response
 	UpdateMstGroupAkses(ctx context.Context, idMasterGroup, namaGroup, deskripsi string) response.Response
 	GetDetailMstGroupAkses(ctx context.Context, idMasterGroup string) response.Response
 	DeleteMstGroupAkses(ctx context.Context, idMasterGroup string) response.Response
-	CreateGroupAkses(ctx context.Context, idMasterAplikasi, idMasterGroup, idMasterModul, akses string) response.Response
+	CreateGroupAkses(
+		ctx context.Context,
+		idMasterAplikasi,
+		idMasterGroup,
+		idMasterModul,
+		akses string,
+	) response.Response
 	DeleteGroupAkses(ctx context.Context, idGroupAkses string) response.Response
 	GetGroupAksesUserMenu(ctx context.Context, idUser, idMasterAplikasi string) response.Response
 	GetGroupAksesUserApps(ctx context.Context, idUser string) response.Response
-	CreateGroupAksesUserApps(ctx context.Context, idUser, idMasterAplikasi, idMasterGroup, statusData string) response.Response
-	BulkCreateGroupAksesUserApps(ctx context.Context, idUsers []string, idMasterAplikasi, idMasterGroup string, statusData bool) response.Response
+	CreateGroupAksesUserApps(
+		ctx context.Context,
+		idUser,
+		idMasterAplikasi,
+		idMasterGroup,
+		statusData string,
+	) response.Response
+	BulkCreateGroupAksesUserApps(
+		ctx context.Context,
+		idUsers []string,
+		idMasterAplikasi,
+		idMasterGroup string,
+		statusData bool,
+	) response.Response
 	UpdateGroupAksesUserApps(ctx context.Context, idTransUserGroup, statusData string) response.Response
 	DeleteGroupAksesUserApps(ctx context.Context, idTransUserGroup string) response.Response
 }
@@ -89,7 +112,13 @@ func (s *GroupAksesService) DeleteMstGroupAkses(ctx context.Context, idMasterGro
 	return response.Response{Success: true, Message: "Success"}
 }
 
-func (s *GroupAksesService) CreateGroupAkses(ctx context.Context, idMasterAplikasi, idMasterGroup, idMasterModul, akses string) response.Response {
+func (s *GroupAksesService) CreateGroupAkses(
+	ctx context.Context,
+	idMasterAplikasi,
+	idMasterGroup,
+	idMasterModul,
+	akses string,
+) response.Response {
 	if err := s.repository.GetGroupAkses().CreateGroupAkses(ctx, idMasterAplikasi, idMasterGroup, idMasterModul, akses); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}
@@ -122,14 +151,26 @@ func (s *GroupAksesService) GetGroupAksesUserApps(ctx context.Context, idUser st
 	return response.Response{Success: true, Message: "Success", Data: respapps}
 }
 
-func (s *GroupAksesService) CreateGroupAksesUserApps(ctx context.Context, idUser, idMasterAplikasi, idMasterGroup, statusData string) response.Response {
+func (s *GroupAksesService) CreateGroupAksesUserApps(
+	ctx context.Context,
+	idUser,
+	idMasterAplikasi,
+	idMasterGroup,
+	statusData string,
+) response.Response {
 	if err := s.repository.GetGroupAkses().CreateGroupAksesUserApps(ctx, idUser, idMasterAplikasi, idMasterGroup, statusData); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}
 	return response.Response{Success: true, Message: "Success"}
 }
 
-func (s *GroupAksesService) BulkCreateGroupAksesUserApps(ctx context.Context, idUsers []string, idMasterAplikasi, idMasterGroup string, statusData bool) response.Response {
+func (s *GroupAksesService) BulkCreateGroupAksesUserApps(
+	ctx context.Context,
+	idUsers []string,
+	idMasterAplikasi,
+	idMasterGroup string,
+	statusData bool,
+) response.Response {
 	if err := s.repository.GetGroupAkses().BulkCreateGroupAksesUserApps(ctx, idUsers, idMasterAplikasi, idMasterGroup, statusData); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}

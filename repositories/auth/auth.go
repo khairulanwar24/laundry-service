@@ -19,9 +19,22 @@ type AuthRepository struct {
 type IAuthRepository interface {
 	FindUserByUsername(ctx context.Context, username string) (map[string]interface{}, error)
 	FindUserBlockByUsername(ctx context.Context, username string) (dto.UserBlock, error)
-	InsertPasswordResetNoUser(ctx context.Context, uuid, username, otp string, tglInsert time.Time) error
+	InsertPasswordResetNoUser(
+		ctx context.Context,
+		uuid,
+		username,
+		otp string,
+		tglInsert time.Time,
+	) error
 	DeactivatePasswordResetByUser(ctx context.Context, idUser string) error
-	InsertPasswordResetWithUser(ctx context.Context, uuid, username, idUser, otp string, tglInsert time.Time) (int64, error)
+	InsertPasswordResetWithUser(
+		ctx context.Context,
+		uuid,
+		username,
+		idUser,
+		otp string,
+		tglInsert time.Time,
+	) (int64, error)
 	FindPasswordReset(ctx context.Context, idPasswordReset string) ([]map[string]interface{}, error)
 	UpdatePasswordResetPercobaan(ctx context.Context, percobaan int32, idPasswordReset string) error
 	LockUser(ctx context.Context, idUser string) error
@@ -50,7 +63,13 @@ func (r *AuthRepository) FindUserBlockByUsername(ctx context.Context, username s
 }
 
 // InsertPasswordResetNoUser menyimpan record reset password tanpa id_user (fallback).
-func (r *AuthRepository) InsertPasswordResetNoUser(ctx context.Context, uuid, username, otp string, tglInsert time.Time) error {
+func (r *AuthRepository) InsertPasswordResetNoUser(
+	ctx context.Context,
+	uuid,
+	username,
+	otp string,
+	tglInsert time.Time,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO password_reset (id_password_reset,username, otp, tgl_insert) VALUES (?,?, ?, ?)`, uuid, username, otp, tglInsert).Error
 }
 
@@ -60,7 +79,14 @@ func (r *AuthRepository) DeactivatePasswordResetByUser(ctx context.Context, idUs
 }
 
 // InsertPasswordResetWithUser menyimpan record reset password dengan id_user.
-func (r *AuthRepository) InsertPasswordResetWithUser(ctx context.Context, uuid, username, idUser, otp string, tglInsert time.Time) (int64, error) {
+func (r *AuthRepository) InsertPasswordResetWithUser(
+	ctx context.Context,
+	uuid,
+	username,
+	idUser,
+	otp string,
+	tglInsert time.Time,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`INSERT INTO password_reset (id_password_reset,username,  id_user, otp, tgl_insert) VALUES (?,?, ?, ?, ?)`, uuid, username, idUser, otp, tglInsert)
 	return result.RowsAffected, result.Error
 }

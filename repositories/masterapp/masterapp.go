@@ -20,9 +20,34 @@ type MasterAppRepository struct {
 type IMasterAppRepository interface {
 	GetMasterApps(order, filter string, limit, offset int) map[string]interface{}
 	GetMasterAppById(ctx context.Context, id string) ([]map[string]interface{}, int64, error)
-	Create(ctx context.Context, namaAplikasi, deskripsi string, tglVersion time.Time, url, versiAplikasi, image string) error
-	UpdateWithoutImage(ctx context.Context, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url, id string) (int64, error)
-	UpdateWithImage(ctx context.Context, image, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url, id string) (int64, error)
+	Create(
+		ctx context.Context,
+		namaAplikasi,
+		deskripsi string,
+		tglVersion time.Time,
+		url,
+		versiAplikasi,
+		image string,
+	) error
+	UpdateWithoutImage(
+		ctx context.Context,
+		namaAplikasi,
+		deskripsi,
+		versiAplikasi string,
+		tglVersion time.Time,
+		url,
+		id string,
+	) (int64, error)
+	UpdateWithImage(
+		ctx context.Context,
+		image,
+		namaAplikasi,
+		deskripsi,
+		versiAplikasi string,
+		tglVersion time.Time,
+		url,
+		id string,
+	) (int64, error)
 	Delete(ctx context.Context, id string) (int64, error)
 }
 
@@ -66,7 +91,15 @@ func (r *MasterAppRepository) GetMasterAppById(ctx context.Context, id string) (
 }
 
 // Create menyimpan master aplikasi baru.
-func (r *MasterAppRepository) Create(ctx context.Context, namaAplikasi, deskripsi string, tglVersion time.Time, url, versiAplikasi, image string) error {
+func (r *MasterAppRepository) Create(
+	ctx context.Context,
+	namaAplikasi,
+	deskripsi string,
+	tglVersion time.Time,
+	url,
+	versiAplikasi,
+	image string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO master_aplikasi
 								(nama_aplikasi
 								, deskripsi
@@ -81,7 +114,15 @@ func (r *MasterAppRepository) Create(ctx context.Context, namaAplikasi, deskrips
 }
 
 // UpdateWithoutImage memperbarui master aplikasi tanpa mengubah kolom image.
-func (r *MasterAppRepository) UpdateWithoutImage(ctx context.Context, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url, id string) (int64, error) {
+func (r *MasterAppRepository) UpdateWithoutImage(
+	ctx context.Context,
+	namaAplikasi,
+	deskripsi,
+	versiAplikasi string,
+	tglVersion time.Time,
+	url,
+	id string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE master_aplikasi
 								SET nama_aplikasi = ?, deskripsi = ?, versi_aplikasi = ?, tgl_version = ?, url = ?
 								WHERE id_master_aplikasi = ?`,
@@ -90,7 +131,16 @@ func (r *MasterAppRepository) UpdateWithoutImage(ctx context.Context, namaAplika
 }
 
 // UpdateWithImage memperbarui master aplikasi termasuk kolom image.
-func (r *MasterAppRepository) UpdateWithImage(ctx context.Context, image, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url, id string) (int64, error) {
+func (r *MasterAppRepository) UpdateWithImage(
+	ctx context.Context,
+	image,
+	namaAplikasi,
+	deskripsi,
+	versiAplikasi string,
+	tglVersion time.Time,
+	url,
+	id string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE master_aplikasi
 								SET image = ?, nama_aplikasi = ?, deskripsi = ?, versi_aplikasi = ?, tgl_version = ?, url = ?
 								WHERE id_master_aplikasi = ?`,

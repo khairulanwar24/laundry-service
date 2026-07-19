@@ -17,19 +17,54 @@ type GroupAksesRepository struct {
 
 // IGroupAksesRepository adalah kontrak akses data domain group akses.
 type IGroupAksesRepository interface {
-	CreateMstGroupAkses(ctx context.Context, idMasterAplikasi, namaGroup, deskripsi string) error
+	CreateMstGroupAkses(
+		ctx context.Context,
+		idMasterAplikasi,
+		namaGroup,
+		deskripsi string,
+	) error
 	GetMstGroupAkses(idMasterAplikasi string, limit, offset int, order, filter string) map[string]interface{}
-	GetMstGroupAksesModul(idMasterAplikasi, idMasterGroup string, limit, offset int, order, filter string) map[string]interface{}
+	GetMstGroupAksesModul(
+		idMasterAplikasi,
+		idMasterGroup string,
+		limit,
+		offset int,
+		order,
+		filter string,
+	) map[string]interface{}
 	GetGroupAkses(idMasterGroup string, limit, offset int, order, filter string) map[string]interface{}
-	UpdateMstGroupAkses(ctx context.Context, idMasterGroup, namaGroup, deskripsi string) (int64, error)
+	UpdateMstGroupAkses(
+		ctx context.Context,
+		idMasterGroup,
+		namaGroup,
+		deskripsi string,
+	) (int64, error)
 	GetDetailMstGroupAkses(ctx context.Context, idMasterGroup string) ([]map[string]interface{}, int64, error)
 	DeleteMstGroupAkses(ctx context.Context, idMasterGroup string) (int64, error)
-	CreateGroupAkses(ctx context.Context, idMasterAplikasi, idMasterGroup, idMasterModul, akses string) error
+	CreateGroupAkses(
+		ctx context.Context,
+		idMasterAplikasi,
+		idMasterGroup,
+		idMasterModul,
+		akses string,
+	) error
 	DeleteGroupAkses(ctx context.Context, idGroupAkses string) (int64, error)
 	GetGroupAksesUserMenu(ctx context.Context, idUser, idMasterAplikasi string) (map[string]interface{}, error)
 	GetGroupAksesUserApps(ctx context.Context, idUser string) (map[string]interface{}, error)
-	CreateGroupAksesUserApps(ctx context.Context, idUser, idMasterAplikasi, idMasterGroup, statusData string) error
-	BulkCreateGroupAksesUserApps(ctx context.Context, idUsers []string, idMasterAplikasi, idMasterGroup string, statusData bool) error
+	CreateGroupAksesUserApps(
+		ctx context.Context,
+		idUser,
+		idMasterAplikasi,
+		idMasterGroup,
+		statusData string,
+	) error
+	BulkCreateGroupAksesUserApps(
+		ctx context.Context,
+		idUsers []string,
+		idMasterAplikasi,
+		idMasterGroup string,
+		statusData bool,
+	) error
 	UpdateGroupAksesUserApps(ctx context.Context, idTransUserGroup, statusData string) (int64, error)
 	DeleteGroupAksesUserApps(ctx context.Context, idTransUserGroup string) (int64, error)
 }
@@ -40,7 +75,12 @@ func NewGroupAksesRepository(db *gorm.DB) IGroupAksesRepository {
 }
 
 // CreateMstGroupAkses menyimpan master group baru.
-func (r *GroupAksesRepository) CreateMstGroupAkses(ctx context.Context, idMasterAplikasi, namaGroup, deskripsi string) error {
+func (r *GroupAksesRepository) CreateMstGroupAkses(
+	ctx context.Context,
+	idMasterAplikasi,
+	namaGroup,
+	deskripsi string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO master_group
 								( id_master_aplikasi
 								, nama_group
@@ -68,7 +108,14 @@ func (r *GroupAksesRepository) GetMstGroupAkses(idMasterAplikasi string, limit, 
 }
 
 // GetMstGroupAksesModul membangun query datatable modul untuk suatu group.
-func (r *GroupAksesRepository) GetMstGroupAksesModul(idMasterAplikasi, idMasterGroup string, limit, offset int, order, filter string) map[string]interface{} {
+func (r *GroupAksesRepository) GetMstGroupAksesModul(
+	idMasterAplikasi,
+	idMasterGroup string,
+	limit,
+	offset int,
+	order,
+	filter string,
+) map[string]interface{} {
 	sRecursive := `with modul as (select * from master_modul where id_master_aplikasi = '` + idMasterAplikasi + `'  and status_data = true),
 group_akses as (select * from group_akses where id_master_group = '` + idMasterGroup + `')`
 	sTable := ` select m.*, mm.nama_menu,ga.id_group_akses,ga.id_master_group from modul as m left join group_akses  as ga on m.id_master_modul = ga.id_master_modul
@@ -102,7 +149,12 @@ inner join master_menu mn on mm.id_master_menu = mn.id_master_menu)
 }
 
 // UpdateMstGroupAkses memperbarui master group.
-func (r *GroupAksesRepository) UpdateMstGroupAkses(ctx context.Context, idMasterGroup, namaGroup, deskripsi string) (int64, error) {
+func (r *GroupAksesRepository) UpdateMstGroupAkses(
+	ctx context.Context,
+	idMasterGroup,
+	namaGroup,
+	deskripsi string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE master_group
 								SET nama_group = ?, deskripsi = ?
 								WHERE id_master_group = ?`, namaGroup, deskripsi, idMasterGroup)
@@ -130,7 +182,13 @@ func (r *GroupAksesRepository) DeleteMstGroupAkses(ctx context.Context, idMaster
 }
 
 // CreateGroupAkses menyimpan akses modul untuk suatu group.
-func (r *GroupAksesRepository) CreateGroupAkses(ctx context.Context, idMasterAplikasi, idMasterGroup, idMasterModul, akses string) error {
+func (r *GroupAksesRepository) CreateGroupAkses(
+	ctx context.Context,
+	idMasterAplikasi,
+	idMasterGroup,
+	idMasterModul,
+	akses string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO group_akses
 	(  id_master_group, id_master_aplikasi, id_master_modul, akses) VALUES ( ?, ?, ?, ? )`, idMasterGroup, idMasterAplikasi, idMasterModul, akses).Error
 }
@@ -220,7 +278,13 @@ func (r *GroupAksesRepository) GetGroupAksesUserApps(ctx context.Context, idUser
 }
 
 // CreateGroupAksesUserApps menautkan user ke suatu group aplikasi.
-func (r *GroupAksesRepository) CreateGroupAksesUserApps(ctx context.Context, idUser, idMasterAplikasi, idMasterGroup, statusData string) error {
+func (r *GroupAksesRepository) CreateGroupAksesUserApps(
+	ctx context.Context,
+	idUser,
+	idMasterAplikasi,
+	idMasterGroup,
+	statusData string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO trans_user_group
 								( id_user
 								, id_master_aplikasi
@@ -232,7 +296,13 @@ func (r *GroupAksesRepository) CreateGroupAksesUserApps(ctx context.Context, idU
 }
 
 // BulkCreateGroupAksesUserApps menautkan banyak user ke suatu group aplikasi dalam satu transaksi.
-func (r *GroupAksesRepository) BulkCreateGroupAksesUserApps(ctx context.Context, idUsers []string, idMasterAplikasi, idMasterGroup string, statusData bool) error {
+func (r *GroupAksesRepository) BulkCreateGroupAksesUserApps(
+	ctx context.Context,
+	idUsers []string,
+	idMasterAplikasi,
+	idMasterGroup string,
+	statusData bool,
+) error {
 	tx := r.db.WithContext(ctx).Begin()
 
 	for _, idUser := range idUsers {

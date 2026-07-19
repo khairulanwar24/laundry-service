@@ -19,10 +19,43 @@ type IMstMenuService interface {
 	GetDetailMstMenu(ctx context.Context, idMasterMenu string) response.Response
 	GetMstMenuModul(idMasterMenu string, limit, offset int, order, filter string) response.Response
 	GetDetailMstMenuModul(ctx context.Context, idMasterModul string) response.Response
-	CreateMstMenu(ctx context.Context, idMasterAplikasi, namaMenu, deskripsi, order, icon string) response.Response
-	CreateMstMenuModul(ctx context.Context, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) response.Response
-	UpdateMstMenu(ctx context.Context, idMasterMenu, namaMenu, deskripsi, order, icon string) response.Response
-	UpdateMstMenuModul(ctx context.Context, idMasterModul, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) response.Response
+	CreateMstMenu(
+		ctx context.Context,
+		idMasterAplikasi,
+		namaMenu,
+		deskripsi,
+		order,
+		icon string,
+	) response.Response
+	CreateMstMenuModul(
+		ctx context.Context,
+		idMasterAplikasi,
+		idMasterMenu,
+		namaModul,
+		path,
+		deskripsi,
+		order,
+		icon string,
+	) response.Response
+	UpdateMstMenu(
+		ctx context.Context,
+		idMasterMenu,
+		namaMenu,
+		deskripsi,
+		order,
+		icon string,
+	) response.Response
+	UpdateMstMenuModul(
+		ctx context.Context,
+		idMasterModul,
+		idMasterAplikasi,
+		idMasterMenu,
+		namaModul,
+		path,
+		deskripsi,
+		order,
+		icon string,
+	) response.Response
 	DeleteMstMenu(ctx context.Context, idMasterMenu string) response.Response
 	DeleteMstMenuModul(ctx context.Context, idMasterModul string) response.Response
 }
@@ -62,21 +95,44 @@ func (s *MstMenuService) GetDetailMstMenuModul(ctx context.Context, idMasterModu
 	return response.Response{Success: true, Message: "Success", Data: user}
 }
 
-func (s *MstMenuService) CreateMstMenu(ctx context.Context, idMasterAplikasi, namaMenu, deskripsi, order, icon string) response.Response {
+func (s *MstMenuService) CreateMstMenu(
+	ctx context.Context,
+	idMasterAplikasi,
+	namaMenu,
+	deskripsi,
+	order,
+	icon string,
+) response.Response {
 	if err := s.repository.GetMstMenu().CreateMstMenu(ctx, idMasterAplikasi, namaMenu, deskripsi, order, icon); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}
 	return response.Response{Success: true, Message: "Success"}
 }
 
-func (s *MstMenuService) CreateMstMenuModul(ctx context.Context, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) response.Response {
+func (s *MstMenuService) CreateMstMenuModul(
+	ctx context.Context,
+	idMasterAplikasi,
+	idMasterMenu,
+	namaModul,
+	path,
+	deskripsi,
+	order,
+	icon string,
+) response.Response {
 	if err := s.repository.GetMstMenu().CreateMstMenuModul(ctx, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}
 	return response.Response{Success: true, Message: "Success"}
 }
 
-func (s *MstMenuService) UpdateMstMenu(ctx context.Context, idMasterMenu, namaMenu, deskripsi, order, icon string) response.Response {
+func (s *MstMenuService) UpdateMstMenu(
+	ctx context.Context,
+	idMasterMenu,
+	namaMenu,
+	deskripsi,
+	order,
+	icon string,
+) response.Response {
 	rows, err := s.repository.GetMstMenu().UpdateMstMenu(ctx, idMasterMenu, namaMenu, deskripsi, order, icon)
 	if err != nil {
 		return response.Response{Success: false, Message: "Gagal Update master_menu"}
@@ -86,7 +142,17 @@ func (s *MstMenuService) UpdateMstMenu(ctx context.Context, idMasterMenu, namaMe
 	return response.Response{Success: true, Message: "Success"}
 }
 
-func (s *MstMenuService) UpdateMstMenuModul(ctx context.Context, idMasterModul, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) response.Response {
+func (s *MstMenuService) UpdateMstMenuModul(
+	ctx context.Context,
+	idMasterModul,
+	idMasterAplikasi,
+	idMasterMenu,
+	namaModul,
+	path,
+	deskripsi,
+	order,
+	icon string,
+) response.Response {
 	rows, err := s.repository.GetMstMenu().UpdateMstMenuModul(ctx, idMasterModul, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon)
 	if err != nil {
 		return response.Response{Success: false, Message: "Gagal Update master modul"}

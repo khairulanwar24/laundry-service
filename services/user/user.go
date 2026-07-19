@@ -19,9 +19,29 @@ type UserService struct {
 // IUserService adalah kontrak logika bisnis domain user.
 type IUserService interface {
 	GetUsers(order, filter string, limit, offset int) response.Response
-	CreateUser(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, password, avatar string) response.Response
+	CreateUser(
+		ctx context.Context,
+		email,
+		idPerson,
+		jenisUser,
+		namaLengkap,
+		noHp,
+		username,
+		password,
+		avatar string,
+	) response.Response
 	GetUser(ctx context.Context, idUser string) response.Response
-	UpdateUser(ctx context.Context, idUser, avatar, email, idPerson, jenisUser, namaLengkap, noHp, username string) response.Response
+	UpdateUser(
+		ctx context.Context,
+		idUser,
+		avatar,
+		email,
+		idPerson,
+		jenisUser,
+		namaLengkap,
+		noHp,
+		username string,
+	) response.Response
 	UpdatePassword(ctx context.Context, idUser, password string) response.Response
 	DeleteUser(ctx context.Context, idUser string) response.Response
 	GetUsersDosen(ctx context.Context) response.Response
@@ -29,7 +49,15 @@ type IUserService interface {
 	BulkCreateUsersMahasiswa(ctx context.Context, items []dto.BulkMahasiswaItem) response.Response
 	GetDetailMahasiswa(ctx context.Context, idRegistrasi string) response.Response
 	GetUsersMahasiswa(ctx context.Context, idProdi string) response.Response
-	GetUsersMahasiswaData(ctx context.Context, idProdi, idAngkatan, order, filter string, limit, offset int) response.Response
+	GetUsersMahasiswaData(
+		ctx context.Context,
+		idProdi,
+		idAngkatan,
+		order,
+		filter string,
+		limit,
+		offset int,
+	) response.Response
 	GenerateUserMahasiswa(ctx context.Context) response.Response
 	GenerateUserDosen(ctx context.Context) response.Response
 	GenerateUserTendik(ctx context.Context) response.Response
@@ -47,7 +75,17 @@ func (s *UserService) GetUsers(order, filter string, limit, offset int) response
 }
 
 // CreateUser membuat user baru: cek duplikat -> hash password -> insert.
-func (s *UserService) CreateUser(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, password, avatar string) response.Response {
+func (s *UserService) CreateUser(
+	ctx context.Context,
+	email,
+	idPerson,
+	jenisUser,
+	namaLengkap,
+	noHp,
+	username,
+	password,
+	avatar string,
+) response.Response {
 	count, err := s.repository.GetUser().CountByPerson(ctx, idPerson)
 	if err != nil {
 		return response.Response{Success: false, Message: err.Error()}
@@ -77,7 +115,17 @@ func (s *UserService) GetUser(ctx context.Context, idUser string) response.Respo
 }
 
 // UpdateUser memperbarui data user (dengan / tanpa avatar).
-func (s *UserService) UpdateUser(ctx context.Context, idUser, avatar, email, idPerson, jenisUser, namaLengkap, noHp, username string) response.Response {
+func (s *UserService) UpdateUser(
+	ctx context.Context,
+	idUser,
+	avatar,
+	email,
+	idPerson,
+	jenisUser,
+	namaLengkap,
+	noHp,
+	username string,
+) response.Response {
 	var rows int64
 	var err error
 	if avatar == "" {
@@ -174,7 +222,15 @@ func (s *UserService) GetUsersMahasiswa(ctx context.Context, idProdi string) res
 }
 
 // GetUsersMahasiswaData mengambil data mahasiswa dengan paginasi & filter (akademik).
-func (s *UserService) GetUsersMahasiswaData(ctx context.Context, idProdi, idAngkatan, order, filter string, limit, offset int) response.Response {
+func (s *UserService) GetUsersMahasiswaData(
+	ctx context.Context,
+	idProdi,
+	idAngkatan,
+	order,
+	filter string,
+	limit,
+	offset int,
+) response.Response {
 	data, total, totalFiltered, _ := s.repository.GetUser().GetMahasiswaData(ctx, idProdi, idAngkatan, order, filter, limit, offset)
 	return response.Response{
 		Success: true,

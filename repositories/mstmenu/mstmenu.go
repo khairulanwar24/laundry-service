@@ -21,10 +21,43 @@ type IMstMenuRepository interface {
 	GetDetailMstMenu(ctx context.Context, idMasterMenu string) ([]map[string]interface{}, int64, error)
 	GetMstMenuModul(idMasterMenu string, limit, offset int, order, filter string) map[string]interface{}
 	GetDetailMstMenuModul(ctx context.Context, idMasterModul string) ([]map[string]interface{}, int64, error)
-	CreateMstMenu(ctx context.Context, idMasterAplikasi, namaMenu, deskripsi, order, icon string) error
-	CreateMstMenuModul(ctx context.Context, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) error
-	UpdateMstMenu(ctx context.Context, idMasterMenu, namaMenu, deskripsi, order, icon string) (int64, error)
-	UpdateMstMenuModul(ctx context.Context, idMasterModul, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) (int64, error)
+	CreateMstMenu(
+		ctx context.Context,
+		idMasterAplikasi,
+		namaMenu,
+		deskripsi,
+		order,
+		icon string,
+	) error
+	CreateMstMenuModul(
+		ctx context.Context,
+		idMasterAplikasi,
+		idMasterMenu,
+		namaModul,
+		path,
+		deskripsi,
+		order,
+		icon string,
+	) error
+	UpdateMstMenu(
+		ctx context.Context,
+		idMasterMenu,
+		namaMenu,
+		deskripsi,
+		order,
+		icon string,
+	) (int64, error)
+	UpdateMstMenuModul(
+		ctx context.Context,
+		idMasterModul,
+		idMasterAplikasi,
+		idMasterMenu,
+		namaModul,
+		path,
+		deskripsi,
+		order,
+		icon string,
+	) (int64, error)
 	DeleteMstMenu(ctx context.Context, idMasterMenu string) (int64, error)
 	DeleteMstMenuModul(ctx context.Context, idMasterModul string) (int64, error)
 }
@@ -77,17 +110,40 @@ func (r *MstMenuRepository) GetDetailMstMenuModul(ctx context.Context, idMasterM
 }
 
 // CreateMstMenu menyimpan master menu baru.
-func (r *MstMenuRepository) CreateMstMenu(ctx context.Context, idMasterAplikasi, namaMenu, deskripsi, order, icon string) error {
+func (r *MstMenuRepository) CreateMstMenu(
+	ctx context.Context,
+	idMasterAplikasi,
+	namaMenu,
+	deskripsi,
+	order,
+	icon string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO master_menu (id_master_aplikasi, nama_menu, deskripsi, "order", icon) VALUES (?, ?, ?, ?, ?)`, idMasterAplikasi, namaMenu, deskripsi, order, icon).Error
 }
 
 // CreateMstMenuModul menyimpan master modul baru.
-func (r *MstMenuRepository) CreateMstMenuModul(ctx context.Context, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) error {
+func (r *MstMenuRepository) CreateMstMenuModul(
+	ctx context.Context,
+	idMasterAplikasi,
+	idMasterMenu,
+	namaModul,
+	path,
+	deskripsi,
+	order,
+	icon string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO master_modul ( id_master_menu, "order", nama_modul, path, deskripsi, id_master_aplikasi, icon) VALUES (?, ?, ?, ?, ?, ?, ?)`, idMasterMenu, order, namaModul, path, deskripsi, idMasterAplikasi, icon).Error
 }
 
 // UpdateMstMenu memperbarui master menu.
-func (r *MstMenuRepository) UpdateMstMenu(ctx context.Context, idMasterMenu, namaMenu, deskripsi, order, icon string) (int64, error) {
+func (r *MstMenuRepository) UpdateMstMenu(
+	ctx context.Context,
+	idMasterMenu,
+	namaMenu,
+	deskripsi,
+	order,
+	icon string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE master_menu
 								SET nama_menu = ?, deskripsi = ?, "order" = ?, icon = ?
 								WHERE id_master_menu = ?`, namaMenu, deskripsi, order, icon, idMasterMenu)
@@ -95,7 +151,17 @@ func (r *MstMenuRepository) UpdateMstMenu(ctx context.Context, idMasterMenu, nam
 }
 
 // UpdateMstMenuModul memperbarui master modul.
-func (r *MstMenuRepository) UpdateMstMenuModul(ctx context.Context, idMasterModul, idMasterAplikasi, idMasterMenu, namaModul, path, deskripsi, order, icon string) (int64, error) {
+func (r *MstMenuRepository) UpdateMstMenuModul(
+	ctx context.Context,
+	idMasterModul,
+	idMasterAplikasi,
+	idMasterMenu,
+	namaModul,
+	path,
+	deskripsi,
+	order,
+	icon string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE master_modul
 								SET id_master_menu = ?, "order" = ?, nama_modul = ?, path = ?, deskripsi = ?, id_master_aplikasi = ?, icon = ?
 								WHERE id_master_modul = ?`, idMasterMenu, order, namaModul, path, deskripsi, idMasterAplikasi, icon, idMasterModul)

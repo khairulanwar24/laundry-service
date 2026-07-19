@@ -18,8 +18,25 @@ type MasterAppService struct {
 type IMasterAppService interface {
 	GetMasterApps(order, filter string, limit, offset int) response.Response
 	GetMasterAppById(ctx context.Context, id string) response.Response
-	CreateMasterApp(ctx context.Context, namaAplikasi, deskripsi string, tglVersion time.Time, url, versiAplikasi, image string) response.Response
-	UpdateMasterApp(ctx context.Context, id, image, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url string) response.Response
+	CreateMasterApp(
+		ctx context.Context,
+		namaAplikasi,
+		deskripsi string,
+		tglVersion time.Time,
+		url,
+		versiAplikasi,
+		image string,
+	) response.Response
+	UpdateMasterApp(
+		ctx context.Context,
+		id,
+		image,
+		namaAplikasi,
+		deskripsi,
+		versiAplikasi string,
+		tglVersion time.Time,
+		url string,
+	) response.Response
 	DeleteMasterApp(ctx context.Context, id string) response.Response
 }
 
@@ -46,7 +63,15 @@ func (s *MasterAppService) GetMasterAppById(ctx context.Context, id string) resp
 }
 
 // CreateMasterApp membuat master aplikasi baru.
-func (s *MasterAppService) CreateMasterApp(ctx context.Context, namaAplikasi, deskripsi string, tglVersion time.Time, url, versiAplikasi, image string) response.Response {
+func (s *MasterAppService) CreateMasterApp(
+	ctx context.Context,
+	namaAplikasi,
+	deskripsi string,
+	tglVersion time.Time,
+	url,
+	versiAplikasi,
+	image string,
+) response.Response {
 	if err := s.repository.GetMasterApp().Create(ctx, namaAplikasi, deskripsi, tglVersion, url, versiAplikasi, image); err != nil {
 		return response.Response{Success: false, Message: err.Error()}
 	}
@@ -54,7 +79,16 @@ func (s *MasterAppService) CreateMasterApp(ctx context.Context, namaAplikasi, de
 }
 
 // UpdateMasterApp memperbarui master aplikasi (dengan / tanpa image).
-func (s *MasterAppService) UpdateMasterApp(ctx context.Context, id, image, namaAplikasi, deskripsi, versiAplikasi string, tglVersion time.Time, url string) response.Response {
+func (s *MasterAppService) UpdateMasterApp(
+	ctx context.Context,
+	id,
+	image,
+	namaAplikasi,
+	deskripsi,
+	versiAplikasi string,
+	tglVersion time.Time,
+	url string,
+) response.Response {
 	var rows int64
 	var err error
 	if image == "" {

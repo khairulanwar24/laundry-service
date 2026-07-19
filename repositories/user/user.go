@@ -23,10 +23,39 @@ type UserRepository struct {
 type IUserRepository interface {
 	GetUsers(order, filter string, limit, offset int) map[string]interface{}
 	CountByPerson(ctx context.Context, idPerson string) (int64, error)
-	Insert(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, passwordHash, avatar string) error
+	Insert(
+		ctx context.Context,
+		email,
+		idPerson,
+		jenisUser,
+		namaLengkap,
+		noHp,
+		username,
+		passwordHash,
+		avatar string,
+	) error
 	FindByID(ctx context.Context, idUser string) ([]map[string]interface{}, int64, error)
-	UpdateWithoutAvatar(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser string) (int64, error)
-	UpdateWithAvatar(ctx context.Context, avatar, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser string) (int64, error)
+	UpdateWithoutAvatar(
+		ctx context.Context,
+		email,
+		idPerson,
+		jenisUser,
+		namaLengkap,
+		noHp,
+		username,
+		idUser string,
+	) (int64, error)
+	UpdateWithAvatar(
+		ctx context.Context,
+		avatar,
+		email,
+		idPerson,
+		jenisUser,
+		namaLengkap,
+		noHp,
+		username,
+		idUser string,
+	) (int64, error)
 	FindFirstLogin(ctx context.Context, idUser string) ([]map[string]interface{}, error)
 	UpdatePasswordFirstLogin(ctx context.Context, passwordHash, idUser string) (int64, error)
 	UpdatePasswordNormal(ctx context.Context, passwordHash, idUser string) (int64, error)
@@ -35,7 +64,15 @@ type IUserRepository interface {
 	GetDetailDosen(ctx context.Context, personID string) ([]dto.DetailUser, error)
 	GetMahasiswa(ctx context.Context, idProdi string) ([]dto.DaftarUser, error)
 	GetDetailMahasiswa(ctx context.Context, idRegistrasi string) ([]map[string]any, error)
-	GetMahasiswaData(ctx context.Context, idProdi, idAngkatan, order, filter string, limit, offset int) ([]dto.DaftarUser, int, int, error)
+	GetMahasiswaData(
+		ctx context.Context,
+		idProdi,
+		idAngkatan,
+		order,
+		filter string,
+		limit,
+		offset int,
+	) ([]dto.DaftarUser, int, int, error)
 	GetMahasiswaSourceForGenerate(ctx context.Context) ([]dto.Mahasiswa, error)
 	GetPegawaiNeedingPassword(ctx context.Context, jenisUser string) ([]dto.Pegawai, error)
 }
@@ -77,7 +114,17 @@ func (r *UserRepository) CountByPerson(ctx context.Context, idPerson string) (in
 }
 
 // Insert menyimpan user baru (password sudah dalam bentuk hash).
-func (r *UserRepository) Insert(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, passwordHash, avatar string) error {
+func (r *UserRepository) Insert(
+	ctx context.Context,
+	email,
+	idPerson,
+	jenisUser,
+	namaLengkap,
+	noHp,
+	username,
+	passwordHash,
+	avatar string,
+) error {
 	return r.db.WithContext(ctx).Exec(`INSERT INTO users
 								( email
 								, id_person
@@ -113,7 +160,16 @@ func (r *UserRepository) FindByID(ctx context.Context, idUser string) ([]map[str
 }
 
 // UpdateWithoutAvatar memperbarui data user tanpa mengubah avatar.
-func (r *UserRepository) UpdateWithoutAvatar(ctx context.Context, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser string) (int64, error) {
+func (r *UserRepository) UpdateWithoutAvatar(
+	ctx context.Context,
+	email,
+	idPerson,
+	jenisUser,
+	namaLengkap,
+	noHp,
+	username,
+	idUser string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE users
 								SET  email = ?, id_person = ?,jenis_user = ?, nama_lengkap = ?, no_hp = ?, username = ?
 								WHERE id_user = ?`, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser)
@@ -121,7 +177,17 @@ func (r *UserRepository) UpdateWithoutAvatar(ctx context.Context, email, idPerso
 }
 
 // UpdateWithAvatar memperbarui data user termasuk avatar.
-func (r *UserRepository) UpdateWithAvatar(ctx context.Context, avatar, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser string) (int64, error) {
+func (r *UserRepository) UpdateWithAvatar(
+	ctx context.Context,
+	avatar,
+	email,
+	idPerson,
+	jenisUser,
+	namaLengkap,
+	noHp,
+	username,
+	idUser string,
+) (int64, error) {
 	result := r.db.WithContext(ctx).Exec(`UPDATE users
 								SET avatar = ?, email = ?, id_person = ?,jenis_user = ?, nama_lengkap = ?, no_hp = ?, username = ?
 								WHERE id_user = ?`, avatar, email, idPerson, jenisUser, namaLengkap, noHp, username, idUser)
@@ -190,7 +256,15 @@ func (r *UserRepository) GetDetailMahasiswa(ctx context.Context, idRegistrasi st
 }
 
 // GetMahasiswaData mengambil data mahasiswa dengan paginasi + filter (server-side datatable) dari database akademik.
-func (r *UserRepository) GetMahasiswaData(ctx context.Context, idProdi, idAngkatan, order, filter string, limit, offset int) ([]dto.DaftarUser, int, int, error) {
+func (r *UserRepository) GetMahasiswaData(
+	ctx context.Context,
+	idProdi,
+	idAngkatan,
+	order,
+	filter string,
+	limit,
+	offset int,
+) ([]dto.DaftarUser, int, int, error) {
 	db := r.dbAkademik.WithContext(ctx)
 
 	sBase := `select lm.id_registrasi_mahasiswa as person_id, lm.nama_mahasiswa as nama_lengkap, lm.nim
