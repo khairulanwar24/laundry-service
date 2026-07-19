@@ -3,6 +3,7 @@ package services
 
 import (
 	"sso-service/repositories"
+	authService "sso-service/services/auth"
 	groupAksesService "sso-service/services/groupakses"
 	masterAppService "sso-service/services/masterapp"
 	mstMenuService "sso-service/services/mstmenu"
@@ -22,6 +23,7 @@ type IServiceRegistry interface {
 	GetMasterApp() masterAppService.IMasterAppService
 	GetMstMenu() mstMenuService.IMstMenuService
 	GetGroupAkses() groupAksesService.IGroupAksesService
+	GetAuth() authService.IAuthService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -52,4 +54,9 @@ func (r *Registry) GetMstMenu() mstMenuService.IMstMenuService {
 // GetGroupAkses mengembalikan service group akses.
 func (r *Registry) GetGroupAkses() groupAksesService.IGroupAksesService {
 	return groupAksesService.NewGroupAksesService(r.repository)
+}
+
+// GetAuth mengembalikan service autentikasi.
+func (r *Registry) GetAuth() authService.IAuthService {
+	return authService.NewAuthService(r.repository)
 }

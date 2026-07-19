@@ -3,6 +3,7 @@
 package repositories
 
 import (
+	authRepo "sso-service/repositories/auth"
 	groupAksesRepo "sso-service/repositories/groupakses"
 	masterAppRepo "sso-service/repositories/masterapp"
 	mstMenuRepo "sso-service/repositories/mstmenu"
@@ -29,6 +30,7 @@ type IRepositoryRegistry interface {
 	GetMasterApp() masterAppRepo.IMasterAppRepository
 	GetMstMenu() mstMenuRepo.IMstMenuRepository
 	GetGroupAkses() groupAksesRepo.IGroupAksesRepository
+	GetAuth() authRepo.IAuthRepository
 }
 
 // NewRepositoryRegistry membuat registry baru dengan ketiga koneksi database.
@@ -59,4 +61,9 @@ func (r *Registry) GetMstMenu() mstMenuRepo.IMstMenuRepository {
 // GetGroupAkses mengembalikan repository group akses (koneksi utama).
 func (r *Registry) GetGroupAkses() groupAksesRepo.IGroupAksesRepository {
 	return groupAksesRepo.NewGroupAksesRepository(r.db)
+}
+
+// GetAuth mengembalikan repository autentikasi (koneksi utama).
+func (r *Registry) GetAuth() authRepo.IAuthRepository {
+	return authRepo.NewAuthRepository(r.db)
 }

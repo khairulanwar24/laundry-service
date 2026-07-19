@@ -66,9 +66,6 @@ func main() {
 	controller := controllers.NewControllerRegistry(service)
 	routes.NewRouteRegistry(controller, app).Serve()
 
-	// Set up routes (domain lama yang belum dimigrasi)
-	routes.SetupRoutes(app)
-
 	// Jalankan Fiber di goroutine
 	go func() {
 		log.Println("HTTP server running on port", httpPort)

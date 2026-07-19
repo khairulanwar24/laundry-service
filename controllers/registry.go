@@ -4,6 +4,7 @@
 package controllers
 
 import (
+	authController "sso-service/controllers/auth"
 	groupAksesController "sso-service/controllers/groupakses"
 	masterAppController "sso-service/controllers/masterapp"
 	mstMenuController "sso-service/controllers/mstmenu"
@@ -24,6 +25,7 @@ type IControllerRegistry interface {
 	GetMasterApp() masterAppController.IMasterAppController
 	GetMstMenu() mstMenuController.IMstMenuController
 	GetGroupAkses() groupAksesController.IGroupAksesController
+	GetAuth() authController.IAuthController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -54,4 +56,9 @@ func (r *Registry) GetMstMenu() mstMenuController.IMstMenuController {
 // GetGroupAkses mengembalikan controller group akses.
 func (r *Registry) GetGroupAkses() groupAksesController.IGroupAksesController {
 	return groupAksesController.NewGroupAksesController(r.service)
+}
+
+// GetAuth mengembalikan controller autentikasi.
+func (r *Registry) GetAuth() authController.IAuthController {
+	return authController.NewAuthController(r.service)
 }
