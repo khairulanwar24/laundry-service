@@ -1,0 +1,26 @@
+# version: "3.7"
+
+services:
+  sso-service:
+    image: sso-service:latest
+    build:
+      context: .
+      dockerfile: ./sso-service.dockerfile
+    container_name: sso-service
+    environment:
+      - SSO_ENV_VARIABLE_1=value1
+      - SSO_ENV_VARIABLE_2=value2
+    ports:
+      - "3001:3001"
+    networks:
+      - kong-net
+      - rabbitmq_net
+    # depends_on:
+    #   - rabbitmq
+    restart: always
+
+networks:
+  kong-net:
+    driver: bridge
+  rabbitmq_net:
+    driver: bridge

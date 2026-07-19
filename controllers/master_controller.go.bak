@@ -1,0 +1,33 @@
+package controllers
+
+import (
+	"sso-service/models"
+	"strconv"
+
+	"github.com/gofiber/fiber/v2"
+)
+
+func GetMasterApps(c *fiber.Ctx) error {
+	// Mengambil parameter limit
+	limit := c.FormValue("limit")
+	limitParam, err := strconv.Atoi(limit)
+	if err != nil {
+		return c.JSON("parameter limit harus angka")
+	}
+
+	// Mengambil parameter offset
+	offset := c.FormValue("offset")
+	offsetParam, err := strconv.Atoi(offset)
+	if err != nil {
+		return c.JSON("parameter offset harus angka")
+	}
+
+	// Mengambil parameter order dan filter
+	order := c.FormValue("order")
+	filter := c.FormValue("filter")
+
+	// Memanggil fungsi model untuk mengambil data dari database dengan parameter yang diberikan
+	data := models.GetMasterApps(limitParam, offsetParam, order, filter)
+
+	return c.JSON(data)
+}

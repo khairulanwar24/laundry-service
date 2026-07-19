@@ -1,0 +1,144 @@
+pipeline {
+    agent any
+
+    environment {
+        GIT_URL            = 'http://gitlab.farmasiunissula.com/farmasi-unissula/sso-service.git'
+        GIT_CREDENTIALS_ID = 'gitlab-token'
+        DOCKER_IMAGE       = "registry.farmasiunissula.com/sso-service:latest"
+        GOPATH             = "/usr/local/go"
+        PATH               = "/usr/local/go/bin:$PATH"
+        SWARM_MANAGER      = "192.168.20.40"
+    }
+
+    
+    stages {
+
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Load ENV file') {
+            steps {
+                script {
+                    def isMainBranch = env.GIT_BRANCH?.endsWith('main')
+                    env.ENV_FILE = isMainBranch ? 'app/.env_prod' : 'app/.env_dev'
+                    env.ENV = isMainBranch ? 'production' : 'development'
+                    env.DOCKER_IMAGE = isMainBranch ? 
+                        "registry.farmasiunissula.com/sso-service:latest" : 
+                        "registry.farmasiunissula.com/sso-service:${env.BRANCH_NAME.replaceAll('/', '-')}"
+                    
+                    echo "Using env file: ${env.ENV_FILE}"
+
+                    def envLines = readFile(env.ENV_FILE).split('\n')
+                    for (line in envLines) {
+                        if (line && line.contains('=') && !line.startsWith('#')) {
+                            def (key, value) = line.tokenize('=')
+                            env."${key.trim()}" = value.trim()
+                        }
+                    }
+
+                    echo "ENV Loaded: ${env.APP_ENV}"
+
+                    def httpPort = sh(script: "grep '^HTTP_PORT=' ${env.ENV_FILE} | cut -d '=' -f2", returnStdout: true).trim()
+                    env.HTTP_PORT = httpPort ?: "3001"
+                    echo "HTTP_PORT: ${env.HTTP_PORT}"
+                }
+            }
+        }
+
+        stage('Copy .env') {
+            steps {
+                sh "cp ${env.ENV_FILE} app/.env"
+            }
+        }
+        
+        stage('Check & Install Go') {
+            steps {
+                script {
+                    def goExists = sh(script: 'which go || echo "not found"', returnStdout: true).trim()
+                    if (goExists == "not found") {
+                        sh '''
+                        echo "Go not found. Installing Go..."
+                        wget -q https: //go.dev/dl/go1.23.4.linux-amd64.tar.gz
+                        sudo tar -C /usr/local -xzf go1.23.4.linux-amd64.tar.gz
+                        echo "export PATH=$PATH:/usr/local/go/bin" | sudo tee -a /etc/profile
+                        echo "export PATH=$PATH:/usr/local/go/bin" | sudo tee -a ~/.bashrc
+                        rm go1.23.4.linux-amd64.tar.gz
+                        source /etc/profile
+                        '''
+                    } else {
+                        echo "Go is already installed: ${goExists}"
+                    }
+                }
+            }
+        }
+
+        stage('Verify Go') {
+            steps {
+                sh '. /etc/profile && go version'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh '''
+                export GOPATH=/var/lib/jenkins/go
+                export PATH=$GOPATH/bin:$PATH
+                env GOOS=linux CGO_ENABLED=0 go build -o SSO-App
+                '''
+            }
+        }
+        
+        stage('Check and Install Docker') {
+            steps {
+                script {
+                    def dockerExists = sh(script: 'command -v docker', returnStatus: true) == 0
+                    if (!dockerExists) {
+                        sh '''
+                        echo "Docker not found. Installing..."
+                        sudo apt update
+                        sudo apt install -y docker.io
+                        sudo systemctl start docker
+                        sudo systemctl enable docker
+                        sudo usermod -aG docker jenkins
+                        '''
+                    } else {
+                        echo "Docker is already installed."
+                    }
+                }
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t $DOCKER_IMAGE .'
+            }
+        }
+        
+        stage('Push to Docker Registry') {
+            steps {
+                    sh 'docker push $DOCKER_IMAGE'
+            }
+        }
+        
+        stage('Deploy to Docker Swarm') {
+            steps {
+                script {
+                    sh """
+                    ssh -i ~/.ssh/id_rsa -o BatchMode=yes debian@${SWARM_MANAGER} -p 2215 \\
+                    "docker service update --image $DOCKER_IMAGE sso-service || \\
+                    docker service create --name sso-service --replicas 3 \\
+                    --publish ${HTTP_PORT}:${HTTP_PORT} \\
+                    --env-file /home/debian/.env \\
+                    $DOCKER_IMAGE && \\
+                    docker service ls && \\
+                    docker service ps sso-service"
+                    """
+                }
+            }
+        }
+
+    }
+}
