@@ -8,6 +8,7 @@ import (
 	groupAksesController "sso-service/controllers/groupakses"
 	masterAppController "sso-service/controllers/masterapp"
 	mstMenuController "sso-service/controllers/mstmenu"
+	osceController "sso-service/controllers/osce"
 	refController "sso-service/controllers/ref"
 	userController "sso-service/controllers/user"
 	"sso-service/services"
@@ -26,6 +27,10 @@ type IControllerRegistry interface {
 	GetMstMenu() mstMenuController.IMstMenuController
 	GetGroupAkses() groupAksesController.IGroupAksesController
 	GetAuth() authController.IAuthController
+	GetOsceStation() osceController.IOsceStationController
+	GetOsceExam() osceController.IOsceExamController
+	GetOsceAssessment() osceController.IOsceAssessmentController
+	GetOsceUser() osceController.IOsceUserController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -61,4 +66,24 @@ func (r *Registry) GetGroupAkses() groupAksesController.IGroupAksesController {
 // GetAuth mengembalikan controller autentikasi.
 func (r *Registry) GetAuth() authController.IAuthController {
 	return authController.NewAuthController(r.service)
+}
+
+// GetOsceStation mengembalikan controller OSCE station.
+func (r *Registry) GetOsceStation() osceController.IOsceStationController {
+	return osceController.NewOsceStationController(r.service)
+}
+
+// GetOsceExam mengembalikan controller OSCE exam.
+func (r *Registry) GetOsceExam() osceController.IOsceExamController {
+	return osceController.NewOsceExamController(r.service)
+}
+
+// GetOsceAssessment mengembalikan controller OSCE assessment.
+func (r *Registry) GetOsceAssessment() osceController.IOsceAssessmentController {
+	return osceController.NewOsceAssessmentController(r.service)
+}
+
+// GetOsceUser mengembalikan controller OSCE user.
+func (r *Registry) GetOsceUser() osceController.IOsceUserController {
+	return osceController.NewOsceUserController(r.service)
 }

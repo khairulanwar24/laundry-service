@@ -9,6 +9,7 @@ import (
 	groupAksesRoute "sso-service/routes/groupakses"
 	masterAppRoute "sso-service/routes/masterapp"
 	mstMenuRoute "sso-service/routes/mstmenu"
+	osceRoute "sso-service/routes/osce"
 	refRoute "sso-service/routes/ref"
 	userRoute "sso-service/routes/user"
 
@@ -39,6 +40,10 @@ func (r *Registry) Serve() {
 	r.mstMenuRoute().Run()
 	r.groupAksesRoute().Run()
 	r.authRoute().Run()
+	r.osceStationRoute().Run()
+	r.osceExamRoute().Run()
+	r.osceAssessmentRoute().Run()
+	r.osceUserRoute().Run()
 }
 
 func (r *Registry) refRoute() refRoute.IRefRoute {
@@ -63,4 +68,20 @@ func (r *Registry) groupAksesRoute() groupAksesRoute.IGroupAksesRoute {
 
 func (r *Registry) authRoute() authRoute.IAuthRoute {
 	return authRoute.NewAuthRoute(r.controller, r.router)
+}
+
+func (r *Registry) osceStationRoute() osceRoute.IOsceStationRoute {
+	return osceRoute.NewOsceStationRoute(r.controller, r.router)
+}
+
+func (r *Registry) osceExamRoute() osceRoute.IOsceExamRoute {
+	return osceRoute.NewOsceExamRoute(r.controller, r.router)
+}
+
+func (r *Registry) osceAssessmentRoute() osceRoute.IOsceAssessmentRoute {
+	return osceRoute.NewOsceAssessmentRoute(r.controller, r.router)
+}
+
+func (r *Registry) osceUserRoute() osceRoute.IOsceUserRoute {
+	return osceRoute.NewOsceUserRoute(r.controller, r.router)
 }

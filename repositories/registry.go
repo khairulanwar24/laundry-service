@@ -7,6 +7,7 @@ import (
 	groupAksesRepo "sso-service/repositories/groupakses"
 	masterAppRepo "sso-service/repositories/masterapp"
 	mstMenuRepo "sso-service/repositories/mstmenu"
+	osceRepo "sso-service/repositories/osce"
 	refRepo "sso-service/repositories/ref"
 	userRepo "sso-service/repositories/user"
 
@@ -31,6 +32,10 @@ type IRepositoryRegistry interface {
 	GetMstMenu() mstMenuRepo.IMstMenuRepository
 	GetGroupAkses() groupAksesRepo.IGroupAksesRepository
 	GetAuth() authRepo.IAuthRepository
+	GetOsceStation() osceRepo.IOsceStationRepository
+	GetOsceExam() osceRepo.IOsceExamRepository
+	GetOsceAssessment() osceRepo.IOsceAssessmentRepository
+	GetOsceUser() osceRepo.IOsceUserRepository
 }
 
 // NewRepositoryRegistry membuat registry baru dengan ketiga koneksi database.
@@ -66,4 +71,24 @@ func (r *Registry) GetGroupAkses() groupAksesRepo.IGroupAksesRepository {
 // GetAuth mengembalikan repository autentikasi (koneksi utama).
 func (r *Registry) GetAuth() authRepo.IAuthRepository {
 	return authRepo.NewAuthRepository(r.db)
+}
+
+// GetOsceStation mengembalikan repository OSCE station (koneksi utama).
+func (r *Registry) GetOsceStation() osceRepo.IOsceStationRepository {
+	return osceRepo.NewOsceStationRepository(r.db)
+}
+
+// GetOsceExam mengembalikan repository OSCE exam (koneksi utama).
+func (r *Registry) GetOsceExam() osceRepo.IOsceExamRepository {
+	return osceRepo.NewOsceExamRepository(r.db)
+}
+
+// GetOsceAssessment mengembalikan repository OSCE assessment (koneksi utama).
+func (r *Registry) GetOsceAssessment() osceRepo.IOsceAssessmentRepository {
+	return osceRepo.NewOsceAssessmentRepository(r.db)
+}
+
+// GetOsceUser mengembalikan repository OSCE user (koneksi utama + akademik).
+func (r *Registry) GetOsceUser() osceRepo.IOsceUserRepository {
+	return osceRepo.NewOsceUserRepository(r.db, r.dbAkademik)
 }

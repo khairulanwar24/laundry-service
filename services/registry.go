@@ -7,6 +7,7 @@ import (
 	groupAksesService "sso-service/services/groupakses"
 	masterAppService "sso-service/services/masterapp"
 	mstMenuService "sso-service/services/mstmenu"
+	osceService "sso-service/services/osce"
 	refService "sso-service/services/ref"
 	userService "sso-service/services/user"
 )
@@ -24,6 +25,10 @@ type IServiceRegistry interface {
 	GetMstMenu() mstMenuService.IMstMenuService
 	GetGroupAkses() groupAksesService.IGroupAksesService
 	GetAuth() authService.IAuthService
+	GetOsceStation() osceService.IOsceStationService
+	GetOsceExam() osceService.IOsceExamService
+	GetOsceAssessment() osceService.IOsceAssessmentService
+	GetOsceUser() osceService.IOsceUserService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -59,4 +64,24 @@ func (r *Registry) GetGroupAkses() groupAksesService.IGroupAksesService {
 // GetAuth mengembalikan service autentikasi.
 func (r *Registry) GetAuth() authService.IAuthService {
 	return authService.NewAuthService(r.repository)
+}
+
+// GetOsceStation mengembalikan service OSCE station.
+func (r *Registry) GetOsceStation() osceService.IOsceStationService {
+	return osceService.NewOsceStationService(r.repository)
+}
+
+// GetOsceExam mengembalikan service OSCE exam.
+func (r *Registry) GetOsceExam() osceService.IOsceExamService {
+	return osceService.NewOsceExamService(r.repository)
+}
+
+// GetOsceAssessment mengembalikan service OSCE assessment.
+func (r *Registry) GetOsceAssessment() osceService.IOsceAssessmentService {
+	return osceService.NewOsceAssessmentService(r.repository)
+}
+
+// GetOsceUser mengembalikan service OSCE user.
+func (r *Registry) GetOsceUser() osceService.IOsceUserService {
+	return osceService.NewOsceUserService(r.repository)
 }

@@ -24,13 +24,7 @@ type IGroupAksesRepository interface {
 		deskripsi string,
 	) error
 	GetMstGroupAkses(idMasterAplikasi string, limit, offset int, order, filter string) map[string]interface{}
-	GetMstGroupAksesModul(
-		idMasterAplikasi,
-		idMasterGroup string,
-		limit,
-		offset int,
-		order,
-		filter string,
+	GetMstGroupAksesModul(idMasterAplikasi, idMasterGroup string, limit, offset int, order, filter string,
 	) map[string]interface{}
 	GetGroupAkses(idMasterGroup string, limit, offset int, order, filter string) map[string]interface{}
 	UpdateMstGroupAkses(
