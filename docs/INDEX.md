@@ -16,6 +16,7 @@
 | [05-groupakses.md](05-groupakses.md) | Domain group akses: master group, akses modul, user-apps assignment |
 | [06-ref.md](06-ref.md) | Domain referensi: prodi & angkatan (data lookup) |
 | [07-infrastruktur.md](07-infrastruktur.md) | Middleware (JWT, validasi, upload S3, email, datatable), konfigurasi, database, gRPC |
+| [golang-untuk-pemula.md](golang-untuk-pemula.md) | Panduan Golang untuk pemula: package, struct, interface, constructor, middleware, dan alur request, dengan contoh kode nyata dari domain OSCE |
 
 ---
 
