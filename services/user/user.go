@@ -8,7 +8,6 @@ import (
 	"sso-service/common/response"
 	"sso-service/domain/dto"
 	middleware "sso-service/middlewares"
-	"sso-service/models"
 	"sso-service/repositories"
 )
 
@@ -211,8 +210,7 @@ func (s *UserService) GenerateUserDosen(ctx context.Context) response.Response {
 
 	for _, m := range dosen {
 		_ = s.UpdatePassword(ctx, m.IDUser, m.Password)
-		// Bridge lintas-domain: mst_group_akses belum dimigrasi ke pola berlapis.
-		_ = models.CreateGroupAksesUserApps(m.IDUser, "acce4365-6835-441e-88d2-56539fb0e823", "f66ff11d-a59c-4b17-b039-3a5b3ed03508", "true")
+		_ = s.repository.GetGroupAkses().CreateGroupAksesUserApps(ctx, m.IDUser, "acce4365-6835-441e-88d2-56539fb0e823", "f66ff11d-a59c-4b17-b039-3a5b3ed03508", "true")
 	}
 
 	return response.Response{Success: true, Message: "Success generate user dosen"}
@@ -227,8 +225,7 @@ func (s *UserService) GenerateUserTendik(ctx context.Context) response.Response 
 
 	for _, m := range tendik {
 		_ = s.UpdatePassword(ctx, m.IDUser, m.Password)
-		// Bridge lintas-domain: mst_group_akses belum dimigrasi ke pola berlapis.
-		_ = models.CreateGroupAksesUserApps(m.IDUser, "acce4365-6835-441e-88d2-56539fb0e823", "0daae1e8-ffb2-4c9e-bf32-6dbc5a8da847", "true")
+		_ = s.repository.GetGroupAkses().CreateGroupAksesUserApps(ctx, m.IDUser, "acce4365-6835-441e-88d2-56539fb0e823", "0daae1e8-ffb2-4c9e-bf32-6dbc5a8da847", "true")
 	}
 
 	return response.Response{Success: true, Message: "Success generate user Tendik"}

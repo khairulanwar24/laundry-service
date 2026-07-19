@@ -5,6 +5,7 @@ package routes
 
 import (
 	"sso-service/controllers"
+	groupAksesRoute "sso-service/routes/groupakses"
 	masterAppRoute "sso-service/routes/masterapp"
 	mstMenuRoute "sso-service/routes/mstmenu"
 	refRoute "sso-service/routes/ref"
@@ -35,6 +36,7 @@ func (r *Registry) Serve() {
 	r.userRoute().Run()
 	r.masterAppRoute().Run()
 	r.mstMenuRoute().Run()
+	r.groupAksesRoute().Run()
 }
 
 func (r *Registry) refRoute() refRoute.IRefRoute {
@@ -51,4 +53,8 @@ func (r *Registry) masterAppRoute() masterAppRoute.IMasterAppRoute {
 
 func (r *Registry) mstMenuRoute() mstMenuRoute.IMstMenuRoute {
 	return mstMenuRoute.NewMstMenuRoute(r.controller, r.router)
+}
+
+func (r *Registry) groupAksesRoute() groupAksesRoute.IGroupAksesRoute {
+	return groupAksesRoute.NewGroupAksesRoute(r.controller, r.router)
 }

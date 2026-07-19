@@ -9,7 +9,7 @@ func SetupRoutes(app *fiber.App) {
 	SetupAuthRoutes(app)
 	// SetupUserRoutes dipindah ke pola berlapis (routes/user) & didaftarkan via NewRouteRegistry di main.go
 	// SetupMasterRoutes dipindah ke pola berlapis (routes/masterapp) & didaftarkan via NewRouteRegistry di main.go
-	SetupMstGrupAksesRoutes(app)
+	// SetupMstGrupAksesRoutes dipindah ke pola berlapis (routes/groupakses) & didaftarkan via NewRouteRegistry di main.go
 	// SetupMstMenuRoutes dipindah ke pola berlapis (routes/mstmenu) & didaftarkan via NewRouteRegistry di main.go
 	// SetupRefRoutes dipindah ke pola berlapis (routes/ref) & didaftarkan via NewRouteRegistry di main.go
 
