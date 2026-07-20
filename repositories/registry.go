@@ -5,6 +5,7 @@ import (
 	accountRepo "laundry-service/repositories/account"
 	catalogRepo "laundry-service/repositories/catalog"
 	customerRepo "laundry-service/repositories/customer"
+	orderRepo "laundry-service/repositories/order"
 	outletRepo "laundry-service/repositories/outlet"
 	paymentMethodRepo "laundry-service/repositories/paymentmethod"
 
@@ -26,6 +27,7 @@ type IRepositoryRegistry interface {
 	GetPerfume() catalogRepo.IPerfumeRepository
 	GetDiscount() catalogRepo.IDiscountRepository
 	GetCustomer() customerRepo.ICustomerRepository
+	GetOrder() orderRepo.IOrderRepository
 }
 
 // NewRepositoryRegistry membuat repository registry baru.
@@ -71,4 +73,9 @@ func (r *Registry) GetDiscount() catalogRepo.IDiscountRepository {
 // GetCustomer mengembalikan repository pelanggan.
 func (r *Registry) GetCustomer() customerRepo.ICustomerRepository {
 	return customerRepo.NewCustomerRepository(r.db)
+}
+
+// GetOrder mengembalikan repository pesanan.
+func (r *Registry) GetOrder() orderRepo.IOrderRepository {
+	return orderRepo.NewOrderRepository(r.db)
 }
