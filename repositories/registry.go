@@ -6,6 +6,7 @@ import (
 	catalogRepo "laundry-service/repositories/catalog"
 	customerRepo "laundry-service/repositories/customer"
 	dashboardRepo "laundry-service/repositories/dashboard"
+	expenseRepo "laundry-service/repositories/expense"
 	orderRepo "laundry-service/repositories/order"
 	outletRepo "laundry-service/repositories/outlet"
 	paymentMethodRepo "laundry-service/repositories/paymentmethod"
@@ -30,6 +31,7 @@ type IRepositoryRegistry interface {
 	GetCustomer() customerRepo.ICustomerRepository
 	GetOrder() orderRepo.IOrderRepository
 	GetDashboard() dashboardRepo.IDashboardRepository
+	GetExpense() expenseRepo.IExpenseRepository
 }
 
 // NewRepositoryRegistry membuat repository registry baru.
@@ -85,4 +87,9 @@ func (r *Registry) GetOrder() orderRepo.IOrderRepository {
 // GetDashboard mengembalikan repository dashboard.
 func (r *Registry) GetDashboard() dashboardRepo.IDashboardRepository {
 	return dashboardRepo.NewDashboardRepository(r.db)
+}
+
+// GetExpense mengembalikan repository pengeluaran.
+func (r *Registry) GetExpense() expenseRepo.IExpenseRepository {
+	return expenseRepo.NewExpenseRepository(r.db)
 }
