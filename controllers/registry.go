@@ -3,6 +3,7 @@ package controllers
 
 import (
 	accountController "laundry-service/controllers/account"
+	outletController "laundry-service/controllers/outlet"
 	"laundry-service/services"
 )
 
@@ -14,6 +15,7 @@ type Registry struct {
 // IControllerRegistry adalah kontrak untuk mengambil controller per-domain.
 type IControllerRegistry interface {
 	GetAccount() accountController.IAccountController
+	GetOutlet() outletController.IOutletController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -24,4 +26,9 @@ func NewControllerRegistry(service services.IServiceRegistry) IControllerRegistr
 // GetAccount mengembalikan controller akun.
 func (r *Registry) GetAccount() accountController.IAccountController {
 	return accountController.NewAccountController(r.service)
+}
+
+// GetOutlet mengembalikan controller outlet.
+func (r *Registry) GetOutlet() outletController.IOutletController {
+	return outletController.NewOutletController(r.service)
 }
