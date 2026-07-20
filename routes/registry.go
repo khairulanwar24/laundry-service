@@ -5,6 +5,7 @@ import (
 	"laundry-service/controllers"
 	accountRoute "laundry-service/routes/account"
 	outletRoute "laundry-service/routes/outlet"
+	paymentMethodRoute "laundry-service/routes/paymentmethod"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,6 +30,7 @@ func NewRouteRegistry(controller controllers.IControllerRegistry, router fiber.R
 func (r *Registry) Serve() {
 	r.accountRoute().Run()
 	r.outletRoute().Run()
+	r.paymentMethodRoute().Run()
 }
 
 func (r *Registry) accountRoute() accountRoute.IAccountRoute {
@@ -37,4 +39,8 @@ func (r *Registry) accountRoute() accountRoute.IAccountRoute {
 
 func (r *Registry) outletRoute() outletRoute.IOutletRoute {
 	return outletRoute.NewOutletRoute(r.controller, r.router)
+}
+
+func (r *Registry) paymentMethodRoute() paymentMethodRoute.IPaymentMethodRoute {
+	return paymentMethodRoute.NewPaymentMethodRoute(r.controller, r.router)
 }

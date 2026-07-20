@@ -4,6 +4,7 @@ package controllers
 import (
 	accountController "laundry-service/controllers/account"
 	outletController "laundry-service/controllers/outlet"
+	paymentMethodController "laundry-service/controllers/paymentmethod"
 	"laundry-service/services"
 )
 
@@ -16,6 +17,7 @@ type Registry struct {
 type IControllerRegistry interface {
 	GetAccount() accountController.IAccountController
 	GetOutlet() outletController.IOutletController
+	GetPaymentMethod() paymentMethodController.IPaymentMethodController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -31,4 +33,9 @@ func (r *Registry) GetAccount() accountController.IAccountController {
 // GetOutlet mengembalikan controller outlet.
 func (r *Registry) GetOutlet() outletController.IOutletController {
 	return outletController.NewOutletController(r.service)
+}
+
+// GetPaymentMethod mengembalikan controller metode pembayaran.
+func (r *Registry) GetPaymentMethod() paymentMethodController.IPaymentMethodController {
+	return paymentMethodController.NewPaymentMethodController(r.service)
 }

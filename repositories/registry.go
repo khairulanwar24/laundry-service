@@ -4,6 +4,7 @@ package repositories
 import (
 	accountRepo "laundry-service/repositories/account"
 	outletRepo "laundry-service/repositories/outlet"
+	paymentMethodRepo "laundry-service/repositories/paymentmethod"
 
 	"gorm.io/gorm"
 )
@@ -17,6 +18,7 @@ type Registry struct {
 type IRepositoryRegistry interface {
 	GetAccount() accountRepo.IAccountRepository
 	GetOutlet() outletRepo.IOutletRepository
+	GetPaymentMethod() paymentMethodRepo.IPaymentMethodRepository
 }
 
 // NewRepositoryRegistry membuat repository registry baru.
@@ -32,4 +34,9 @@ func (r *Registry) GetAccount() accountRepo.IAccountRepository {
 // GetOutlet mengembalikan repository outlet.
 func (r *Registry) GetOutlet() outletRepo.IOutletRepository {
 	return outletRepo.NewOutletRepository(r.db)
+}
+
+// GetPaymentMethod mengembalikan repository metode pembayaran.
+func (r *Registry) GetPaymentMethod() paymentMethodRepo.IPaymentMethodRepository {
+	return paymentMethodRepo.NewPaymentMethodRepository(r.db)
 }
