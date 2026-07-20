@@ -10,9 +10,15 @@
 |------|-----------|
 | [00-arsitektur.md](00-arsitektur.md) | Arsitektur keseluruhan, struktur folder, pola desain, diagram dependency injection, dan alur request |
 | [07-infrastruktur.md](07-infrastruktur.md) | Middleware (JWT, validasi, upload S3, datatable), konfigurasi, database |
-
-Dokumentasi per-domain (account, outlet, payment method, catalog, customer, order, dashboard, expense,
-report) ditambahkan seiring domain tersebut selesai diimplementasikan.
+| [08-account.md](08-account.md) | Domain akun: registrasi, login, profil, logout, reset password via OTP email |
+| [09-outlet.md](09-outlet.md) | Domain outlet: kelola outlet, staff, undang karyawan, role & permission |
+| [10-paymentmethod.md](10-paymentmethod.md) | Domain metode pembayaran outlet (cash/transfer/e-wallet) |
+| [11-catalog.md](11-catalog.md) | Domain katalog: layanan, varian layanan, parfum, diskon |
+| [12-customer.md](12-customer.md) | Domain pelanggan outlet + riwayat pesanan |
+| [13-order.md](13-order.md) | Domain pesanan: mesin status, invoice, pembayaran, pickup — inti bisnis laundry |
+| [14-dashboard.md](14-dashboard.md) | Domain dashboard: ringkasan operasional & keuangan outlet |
+| [15-expense.md](15-expense.md) | Domain pengeluaran outlet |
+| [16-report.md](16-report.md) | Domain laporan transaksi outlet |
 
 ---
 
