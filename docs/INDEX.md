@@ -1,6 +1,6 @@
-# Dokumentasi SSO Service (laundry-service)
+# Dokumentasi Laundry Service
 
-> **Microservice Single Sign-On** — autentikasi, otorisasi, manajemen user, aplikasi, menu, modul, dan group akses untuk ekosistem Farmasi UNISSULA.
+> **Backend manajemen laundry multi-outlet** — akun & autentikasi, outlet, metode pembayaran, katalog layanan, pelanggan, pesanan, dashboard, dan pengeluaran.
 
 ---
 
@@ -9,14 +9,10 @@
 | File | Deskripsi |
 |------|-----------|
 | [00-arsitektur.md](00-arsitektur.md) | Arsitektur keseluruhan, struktur folder, pola desain, diagram dependency injection, dan alur request |
-| [01-auth.md](01-auth.md) | Domain autentikasi: login, logout, reset password, OTP, ganti password, refresh token |
-| [02-user.md](02-user.md) | Domain user: CRUD user, bulk create mahasiswa, generate user (mahasiswa/dosen/tendik) |
-| [03-masterapp.md](03-masterapp.md) | Domain master aplikasi: kelola aplikasi yang terdaftar di SSO |
-| [04-mstmenu.md](04-mstmenu.md) | Domain master menu & modul: struktur navigasi per aplikasi |
-| [05-groupakses.md](05-groupakses.md) | Domain group akses: master group, akses modul, user-apps assignment |
-| [06-ref.md](06-ref.md) | Domain referensi: prodi & angkatan (data lookup) |
-| [07-infrastruktur.md](07-infrastruktur.md) | Middleware (JWT, validasi, upload S3, email, datatable), konfigurasi, database, gRPC |
-| [golang-untuk-pemula.md](golang-untuk-pemula.md) | Panduan Golang untuk pemula: package, struct, interface, constructor, middleware, dan alur request, dengan contoh kode nyata dari domain OSCE |
+| [07-infrastruktur.md](07-infrastruktur.md) | Middleware (JWT, validasi, upload S3, datatable), konfigurasi, database |
+
+Dokumentasi per-domain (account, outlet, payment method, catalog, customer, order, dashboard, expense,
+report) ditambahkan seiring domain tersebut selesai diimplementasikan.
 
 ---
 
@@ -37,13 +33,11 @@ Setiap dokumen fitur mengikuti struktur yang sama:
 
 | Teknologi | Penggunaan |
 |-----------|-----------|
-| **Go 1.21+** | Bahasa pemrograman utama |
+| **Go 1.23+** | Bahasa pemrograman utama |
 | **Fiber v2** | HTTP framework (mirip Express.js) |
-| **GORM** | ORM untuk PostgreSQL |
-| **PostgreSQL** | Database (3 koneksi: SSO, Akademik, Digiclass) |
-| **gRPC / Protobuf** | Token validation service antar microservice |
-| **JWT (golang-jwt)** | Access token, refresh token, OTP token |
+| **GORM** | Akses raw SQL ke PostgreSQL |
+| **PostgreSQL** | Database, domain laundry memakai schema `laundry` |
+| **JWT (golang-jwt)** | Access token & refresh token |
 | **bcrypt** | Hashing password |
-| **S3 (IDCloudHost)** | Object storage untuk avatar & image |
-| **RabbitMQ** | Antrean email (opsional, ada cadangan HTTP API) |
+| **S3 (IDCloudHost)** | Object storage untuk logo outlet & foto layanan |
 | **go-playground/validator** | Validasi form & params input |

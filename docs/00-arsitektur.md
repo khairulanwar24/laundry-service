@@ -6,8 +6,8 @@
 laundry-service/
 ├── main.go                     # Entry point: inisialisasi DB, registry, gRPC, HTTP server
 ├── app/.env                    # Environment variables
-├── config/                     # Konfigurasi database (3 koneksi: SSO, Akademik, Digiclass)
-├── database/                   # Koneksi database (Connect, ConnectDigiclass)
+├── config/                     # Konfigurasi koneksi database
+├── database/                   # Koneksi database (Connect) + migration/ (raw SQL per skema)
 ├── domain/dto/                 # Data Transfer Object — struct request/response shared antar layer
 ├── repositories/               # Lapisan akses data (RAW SQL via GORM, per domain)
 ├── services/                   # Lapisan logika bisnis (orkestrasi, validasi, hashing)
@@ -78,7 +78,7 @@ main.go
 
 ```go
 // 1. Repository Registry
-repository := repositories.NewRepositoryRegistry(DB, DBAkademik, DBDigiclass)
+repository := repositories.NewRepositoryRegistry(DB)
 
 // 2. Service Registry (butuh Repository)
 service := services.NewServiceRegistry(repository)
@@ -97,12 +97,10 @@ IRepositoryRegistry ◄── IServiceRegistry ◄── IControllerRegistry ◄
        │                      │                       │                     │
   Registry{DB}           Registry{Repo}         Registry{Svc}         Registry{Ctrl,Router}
        │                      │                       │                     │
-  GetAuth()             GetAuth()               GetAuth()               Serve()
-  GetUser()             GetUser()               GetUser()               authRoute()
-  GetRef()              GetRef()                GetRef()                userRoute()
-  GetMasterApp()        GetMasterApp()          GetMasterApp()          ...dll
-  GetMstMenu()          GetMstMenu()            GetMstMenu()
-  GetGroupAkses()       GetGroupAkses()         GetGroupAkses()
+  GetAccount()          GetAccount()            GetAccount()            Serve()
+  GetOutlet()           GetOutlet()             GetOutlet()             accountRoute()
+  GetPaymentMethod()    GetPaymentMethod()      GetPaymentMethod()      outletRoute()
+  Get...()              Get...()                Get...()                ...dll (satu domain baru = satu Get method di tiap registry)
 ```
 
 ---
@@ -110,11 +108,11 @@ IRepositoryRegistry ◄── IServiceRegistry ◄── IControllerRegistry ◄
 ## Alur Request Lengkap (Contoh: Login)
 
 ```
-1. HTTP POST /auth/login {username, password}
+1. HTTP POST /account/login {email, password}
        │
        ▼
-2. routes/auth/auth.go — Run()
-   api.Post("/login", middleware.ValidateForm(&dto.LoginForm{}), controller.GetAuth().LoginController)
+2. routes/account/account.go — Run()
+   api.Post("/login", middleware.ValidateForm(&dto.LoginForm{}), controller.GetAccount().Login)
        │
        ├── Middleware ValidateForm:
        │   • BodyParser → LoginForm struct
@@ -122,45 +120,24 @@ IRepositoryRegistry ◄── IServiceRegistry ◄── IControllerRegistry ◄
        │   • Simpan ke c.Locals("validatedForm")
        │
        ▼
-3. controllers/auth/auth.go — LoginController()
+3. controllers/account/account.go — Login()
    • Ambil form: c.Locals("validatedForm").(*dto.LoginForm)
-   • Panggil: ctrl.service.GetAuth().Login(ctx, username, password)
+   • Panggil: ctrl.service.GetAccount().Login(ctx, form.Email, form.Password)
        │
        ▼
-4. services/auth/auth.go — Login()
-   • Panggil: s.repository.GetAuth().FindUserByUsername(ctx, username)
+4. services/account/account.go — Login()
+   • Panggil: s.repository.GetAccount().FindUserByEmail(ctx, email)
    • Bandingkan hash password: middleware.CheckPasswordHash(password, hash)
-   • Kembalikan response.Response{Success: true, Data: user}
+   • Buat access_token (JWT 5 menit) & refresh_token (JWT 8 jam)
+   • Kembalikan response.Response{Success: true, Data: {user, access_token, refresh_token}}
        │
        ▼
-5. repositories/auth/auth.go — FindUserByUsername()
+5. repositories/account/account.go — FindUserByEmail()
    • Eksekusi RAW SQL via GORM:
-     SELECT username, nama_lengkap, email, no_hp, avatar, id_user, id_person,
-            first_login, password, jenis_user
-     FROM users WHERE username = ?
+     SELECT id_user, nama, email, telepon, alamat, password, is_active
+     FROM laundry.users WHERE email = ? AND status_data = true
    • Kembalikan map[string]interface{}
-       │
-       ▼
-6. Kembali ke Controller — LoginController():
-   • Jika sukses:
-     • Buat refresh_token (JWT 8 jam, HTTP-only cookie)
-     • Buat access_token  (JWT 5 menit, di response body)
-     • Return JSON: {success, message, data: {user, access_token}}
 ```
-
----
-
-## 3 Koneksi Database
-
-| Koneksi | Schema | Penggunaan |
-|---------|--------|-----------|
-| `database.DB` | `public` | SSO utama: users, master_aplikasi, master_menu, master_modul, master_group, group_akses, trans_user_group, password_reset |
-| `database.DBAkademik` | `akademik` | Data mahasiswa: list_mahasiswa, master_angkatan_mahasiswa, master_prodi |
-| `database.DBDigiclass` | `public` | Data dosen: master_dosen |
-
-Dominan domain hanya pakai `database.DB`, kecuali:
-- **user** — pakai ketiganya (DB+DBAkademik+DBDigiclass)
-- **ref** — pakai DBAkademik saja
 
 ---
 

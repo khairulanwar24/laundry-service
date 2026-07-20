@@ -1,16 +1,7 @@
-// registry.go adalah pusat pendaftaran (registry) seluruh controller.
-// Berada di package `controllers` (root) berdampingan dengan handler flat lama
-// selama masa migrasi bertahap.
+// registry.go adalah pusat pendaftaran (registry) seluruh controller per-domain.
 package controllers
 
 import (
-	authController "laundry-service/controllers/auth"
-	groupAksesController "laundry-service/controllers/groupakses"
-	masterAppController "laundry-service/controllers/masterapp"
-	mstMenuController "laundry-service/controllers/mstmenu"
-	osceController "laundry-service/controllers/osce"
-	refController "laundry-service/controllers/ref"
-	userController "laundry-service/controllers/user"
 	"laundry-service/services"
 )
 
@@ -21,69 +12,9 @@ type Registry struct {
 
 // IControllerRegistry adalah kontrak untuk mengambil controller per-domain.
 type IControllerRegistry interface {
-	GetRef() refController.IRefController
-	GetUser() userController.IUserController
-	GetMasterApp() masterAppController.IMasterAppController
-	GetMstMenu() mstMenuController.IMstMenuController
-	GetGroupAkses() groupAksesController.IGroupAksesController
-	GetAuth() authController.IAuthController
-	GetOsceStation() osceController.IOsceStationController
-	GetOsceExam() osceController.IOsceExamController
-	GetOsceAssessment() osceController.IOsceAssessmentController
-	GetOsceUser() osceController.IOsceUserController
 }
 
 // NewControllerRegistry membuat controller registry baru.
 func NewControllerRegistry(service services.IServiceRegistry) IControllerRegistry {
 	return &Registry{service: service}
-}
-
-// GetRef mengembalikan controller referensi.
-func (r *Registry) GetRef() refController.IRefController {
-	return refController.NewRefController(r.service)
-}
-
-// GetUser mengembalikan controller user.
-func (r *Registry) GetUser() userController.IUserController {
-	return userController.NewUserController(r.service)
-}
-
-// GetMasterApp mengembalikan controller master aplikasi.
-func (r *Registry) GetMasterApp() masterAppController.IMasterAppController {
-	return masterAppController.NewMasterAppController(r.service)
-}
-
-// GetMstMenu mengembalikan controller master menu & modul.
-func (r *Registry) GetMstMenu() mstMenuController.IMstMenuController {
-	return mstMenuController.NewMstMenuController(r.service)
-}
-
-// GetGroupAkses mengembalikan controller group akses.
-func (r *Registry) GetGroupAkses() groupAksesController.IGroupAksesController {
-	return groupAksesController.NewGroupAksesController(r.service)
-}
-
-// GetAuth mengembalikan controller autentikasi.
-func (r *Registry) GetAuth() authController.IAuthController {
-	return authController.NewAuthController(r.service)
-}
-
-// GetOsceStation mengembalikan controller OSCE station.
-func (r *Registry) GetOsceStation() osceController.IOsceStationController {
-	return osceController.NewOsceStationController(r.service)
-}
-
-// GetOsceExam mengembalikan controller OSCE exam.
-func (r *Registry) GetOsceExam() osceController.IOsceExamController {
-	return osceController.NewOsceExamController(r.service)
-}
-
-// GetOsceAssessment mengembalikan controller OSCE assessment.
-func (r *Registry) GetOsceAssessment() osceController.IOsceAssessmentController {
-	return osceController.NewOsceAssessmentController(r.service)
-}
-
-// GetOsceUser mengembalikan controller OSCE user.
-func (r *Registry) GetOsceUser() osceController.IOsceUserController {
-	return osceController.NewOsceUserController(r.service)
 }
