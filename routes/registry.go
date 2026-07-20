@@ -3,6 +3,7 @@ package routes
 
 import (
 	"laundry-service/controllers"
+	accountRoute "laundry-service/routes/account"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -25,4 +26,9 @@ func NewRouteRegistry(controller controllers.IControllerRegistry, router fiber.R
 
 // Serve mendaftarkan seluruh rute domain laundry.
 func (r *Registry) Serve() {
+	r.accountRoute().Run()
+}
+
+func (r *Registry) accountRoute() accountRoute.IAccountRoute {
+	return accountRoute.NewAccountRoute(r.controller, r.router)
 }
