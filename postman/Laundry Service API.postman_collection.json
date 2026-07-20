@@ -1,0 +1,948 @@
+{
+	"info": {
+		"_postman_id": "b6f2f2b0-6a7a-4a2b-9a2e-laundryservice001",
+		"name": "Laundry Service API (Go)",
+		"description": "Koleksi Postman untuk laundry-service (Go/Fiber). Base URL default http://localhost:3001, tidak ada prefix /api. Alur pemakaian: Register/Login (Account) -> Create Outlet -> Payment Method / Catalog (Service+Variant, Perfume, Discount) -> Customer -> Order -> Dashboard/Expense/Report. Sebagian besar request punya test script yang otomatis menyimpan id hasil create ke collection variable, jadi cukup dijalankan berurutan.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{ "key": "token", "value": "{{access_token}}", "type": "string" }
+		]
+	},
+	"variable": [
+		{ "key": "base_url", "value": "http://localhost:3001", "type": "string" },
+		{ "key": "access_token", "value": "", "type": "string" },
+		{ "key": "refresh_token", "value": "", "type": "string" },
+		{ "key": "reset_token", "value": "", "type": "string" },
+		{ "key": "id_outlet", "value": "", "type": "string" },
+		{ "key": "id_member", "value": "", "type": "string" },
+		{ "key": "id_payment_method", "value": "", "type": "string" },
+		{ "key": "id_service", "value": "", "type": "string" },
+		{ "key": "id_service_variant", "value": "", "type": "string" },
+		{ "key": "id_perfume", "value": "", "type": "string" },
+		{ "key": "id_discount", "value": "", "type": "string" },
+		{ "key": "id_customer", "value": "", "type": "string" },
+		{ "key": "id_order", "value": "", "type": "string" },
+		{ "key": "id_expense", "value": "", "type": "string" }
+	],
+	"item": [
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.success) {",
+									"    pm.collectionVariables.set('access_token', json.data.access_token);",
+									"    pm.collectionVariables.set('refresh_token', json.data.refresh_token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Owner Demo\",\n  \"email\": \"owner@demo.com\",\n  \"telepon\": \"081234567890\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"alamat\": \"Jl. Contoh No. 1\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/account/register", "host": [ "{{base_url}}" ], "path": [ "account", "register" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.success) {",
+									"    pm.collectionVariables.set('access_token', json.data.access_token);",
+									"    pm.collectionVariables.set('refresh_token', json.data.refresh_token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"owner@demo.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/account/login", "host": [ "{{base_url}}" ], "path": [ "account", "login" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/account/me", "host": [ "{{base_url}}" ], "path": [ "account", "me" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": { "raw": "{{base_url}}/account/logout", "host": [ "{{base_url}}" ], "path": [ "account", "logout" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Forgot Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success && json.data && json.data.token) {",
+									"    pm.collectionVariables.set('reset_token', json.data.token);",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"owner@demo.com\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/account/forgot-password", "host": [ "{{base_url}}" ], "path": [ "account", "forgot-password" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"auth": { "type": "noauth" },
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"owner@demo.com\",\n  \"token\": \"{{reset_token}}\",\n  \"otp\": \"123456\",\n  \"password\": \"passwordbaru123\",\n  \"password_confirmation\": \"passwordbaru123\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/account/reset-password", "host": [ "{{base_url}}" ], "path": [ "account", "reset-password" ] }
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Outlet",
+			"item": [
+				{
+					"name": "List My Outlets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets", "host": [ "{{base_url}}" ], "path": [ "outlets" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Create Outlet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_outlet', json.data.id_outlet); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Outlet Jaya Laundry\",\n  \"alamat\": \"Jl. Palagan No. 1\",\n  \"telepon\": \"081234567891\",\n  \"logo_path\": \"\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets", "host": [ "{{base_url}}" ], "path": [ "outlets" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Get Outlet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Update Outlet",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Outlet Jaya Laundry Updated\",\n  \"alamat\": \"Jl. Sudirman No. 2\",\n  \"telepon\": \"081234567892\",\n  \"logo_path\": \"\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "List Staff",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/staff", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "staff" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Invite Employee",
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Karyawan Demo\",\n  \"telepon\": \"081298765432\",\n  \"email\": \"karyawan@demo.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"role\": \"karyawan\",\n  \"alamat\": \"Jl. Karyawan No. 3\",\n  \"permissions\": {}\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/invite", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "invite" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Update Member",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"role\": \"karyawan\",\n  \"permissions\": {\n    \"manage_services\": true\n  }\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/members/{{id_member}}",
+							"host": [ "{{base_url}}" ],
+							"path": [ "outlets", "{{id_outlet}}", "members", "{{id_member}}" ]
+						},
+						"description": "id_member = id_user_outlet, bisa dilihat dari response 'List Staff' (bukan id_user dari Invite Employee)."
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Member",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/members/{{id_member}}",
+							"host": [ "{{base_url}}" ],
+							"path": [ "outlets", "{{id_outlet}}", "members", "{{id_member}}" ]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Method",
+			"item": [
+				{
+					"name": "List Payment Methods",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/payment-methods", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "payment-methods" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Create Payment Method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_payment_method', json.data.id_payment_method); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kategori\": \"cash\",\n  \"nama\": \"Tunai\",\n  \"logo\": \"\",\n  \"nama_pemilik\": \"\",\n  \"tags\": [],\n  \"is_active\": true\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/payment-methods", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "payment-methods" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment Method",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kategori\": \"transfer\",\n  \"nama\": \"Transfer Bank BCA\",\n  \"logo\": \"\",\n  \"nama_pemilik\": \"Jaya Laundry\",\n  \"tags\": [\"bca\"],\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/payment-methods/{{id_payment_method}}",
+							"host": [ "{{base_url}}" ],
+							"path": [ "outlets", "{{id_outlet}}", "payment-methods", "{{id_payment_method}}" ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Payment Method",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/payment-methods/{{id_payment_method}}",
+							"host": [ "{{base_url}}" ],
+							"path": [ "outlets", "{{id_outlet}}", "payment-methods", "{{id_payment_method}}" ]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Catalog",
+			"item": [
+				{
+					"name": "Services: List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/services?q=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "services" ],
+							"query": [ { "key": "q", "value": "" } ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Services: Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_service', json.data.id_service); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Cuci Kering\",\n  \"prioritas\": 50,\n  \"langkah_proses\": [\"cuci\", \"kering\", \"setrika\"],\n  \"is_active\": true\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/services", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "services" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Services: Update",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Cuci Kering Express\",\n  \"prioritas\": 80,\n  \"langkah_proses\": [\"cuci\", \"kering\"],\n  \"is_active\": true\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/services/{{id_service}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "services", "{{id_service}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Services: Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/services/{{id_service}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "services", "{{id_service}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Variants: Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_service_variant', json.data.id_service_variant); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Reguler\",\n  \"satuan\": \"kg\",\n  \"harga_per_satuan\": 7000,\n  \"durasi_pengerjaan_jam\": 24,\n  \"gambar_path\": \"\",\n  \"catatan\": \"\",\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/services/{{id_service}}/variants",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "services", "{{id_service}}", "variants" ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Variants: Update",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Express\",\n  \"satuan\": \"kg\",\n  \"harga_per_satuan\": 10000,\n  \"durasi_pengerjaan_jam\": 12,\n  \"gambar_path\": \"\",\n  \"catatan\": \"\",\n  \"is_active\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/service-variants/{{id_service_variant}}",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "service-variants", "{{id_service_variant}}" ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Perfumes: List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/perfumes", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "perfumes" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Perfumes: Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_perfume', json.data.id_perfume); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"nama\": \"Molto\",\n  \"catatan\": \"\",\n  \"is_active\": true\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/perfumes", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "perfumes" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Perfumes: Update",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"nama\": \"Rose\",\n  \"catatan\": \"\",\n  \"is_active\": true\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/perfumes/{{id_perfume}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "perfumes", "{{id_perfume}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Discounts: List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/discounts", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "discounts" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Discounts: Create",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_discount', json.data.id_discount); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"nama\": \"Diskon Member\",\n  \"jenis\": \"percent\",\n  \"nilai\": 10,\n  \"catatan\": \"\",\n  \"is_active\": true\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/discounts", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "discounts" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Discounts: Update",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"nama\": \"Diskon Member Updated\",\n  \"jenis\": \"nominal\",\n  \"nilai\": 5000,\n  \"catatan\": \"\",\n  \"is_active\": true\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/discounts/{{id_discount}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "discounts", "{{id_discount}}" ] }
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Customer",
+			"item": [
+				{
+					"name": "List Customers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/customers?search=&is_active=true&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers" ],
+							"query": [
+								{ "key": "search", "value": "" },
+								{ "key": "is_active", "value": "true" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_customer', json.data.id_customer); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Budi Santoso\",\n  \"telepon\": \"081234567899\",\n  \"email\": \"budi@example.com\",\n  \"alamat\": \"Jl. Merdeka No. 123\",\n  \"is_active\": true\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/customers", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/customers/{{id_customer}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers", "{{id_customer}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Update Customer",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Budi Santoso Updated\",\n  \"telepon\": \"081234567899\",\n  \"email\": \"budi@example.com\",\n  \"alamat\": \"Jl. Merdeka No. 456\",\n  \"is_active\": true\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/customers/{{id_customer}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers", "{{id_customer}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Customer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/customers/{{id_customer}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers", "{{id_customer}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "List Customer Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/customers/{{id_customer}}/orders?status=&from_date=&to_date=&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "customers", "{{id_customer}}", "orders" ],
+							"query": [
+								{ "key": "status", "value": "" },
+								{ "key": "from_date", "value": "" },
+								{ "key": "to_date", "value": "" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "List Orders by Tab",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/orders?tab=antrian&q=&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders" ],
+							"query": [
+								{ "key": "tab", "value": "antrian" },
+								{ "key": "q", "value": "" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/orders/search?q=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "search" ],
+							"query": [ { "key": "q", "value": "" } ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Status 200', function () { pm.response.to.have.status(200); });",
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_order', json.data.id_order); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"customer_id\": \"{{id_customer}}\",\n  \"items\": [\n    {\n      \"service_variant_id\": \"{{id_service_variant}}\",\n      \"qty\": 2,\n      \"catatan\": \"\"\n    }\n  ],\n  \"perfume_id\": \"{{id_perfume}}\",\n  \"discount_id\": \"{{id_discount}}\",\n  \"catatan\": \"Cuci cepat\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders/{{id_order}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "{{id_order}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Order History",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders/{{id_order}}/history", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "{{id_order}}", "history" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Change Order Status",
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"to\": \"PROSES\",\n  \"catatan\": \"Mulai dikerjakan\"\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders/{{id_order}}/status", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "{{id_order}}", "status" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Pay Order",
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"payment_method_id\": \"{{id_payment_method}}\",\n  \"amount\": 20000,\n  \"ref_no\": \"\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders/{{id_order}}/pay", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "{{id_order}}", "pay" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Pickup Order",
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": { "mode": "raw", "raw": "{\n  \"catatan\": \"Diambil oleh customer\"\n}" },
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/orders/{{id_order}}/pickup", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "orders", "{{id_order}}", "pickup" ] }
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dashboard",
+			"item": [
+				{
+					"name": "Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/summary?date=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "summary" ],
+							"query": [ { "key": "date", "value": "" } ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Daily Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/daily-report?date=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "daily-report" ],
+							"query": [ { "key": "date", "value": "" } ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Financial Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/financial-summary?date=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "financial-summary" ],
+							"query": [ { "key": "date", "value": "" } ]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Revenue Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/revenue-summary", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "revenue-summary" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Profit Loss Summary",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/profit-loss-summary", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "profit-loss-summary" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Report",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/customer-report?search=&status=all&date_from=&date_to=",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "customer-report" ],
+							"query": [
+								{ "key": "search", "value": "" },
+								{ "key": "status", "value": "all" },
+								{ "key": "date_from", "value": "" },
+								{ "key": "date_to", "value": "" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer Search",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/dashboard/customer-search?search=&status=all&date_from=&date_to=&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "dashboard", "customer-search" ],
+							"query": [
+								{ "key": "search", "value": "" },
+								{ "key": "status", "value": "all" },
+								{ "key": "date_from", "value": "" },
+								{ "key": "date_to", "value": "" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Expense",
+			"item": [
+				{
+					"name": "List Expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/expenses?kategori=&start_date=&end_date=&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "expenses" ],
+							"query": [
+								{ "key": "kategori", "value": "" },
+								{ "key": "start_date", "value": "" },
+								{ "key": "end_date", "value": "" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Expense",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var json = pm.response.json();",
+									"if (json.success) { pm.collectionVariables.set('id_expense', json.data.id_expense); }"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kategori\": \"Listrik\",\n  \"jumlah\": 250000,\n  \"deskripsi\": \"Tagihan listrik bulan ini\",\n  \"tanggal\": \"2026-07-01\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/expenses", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "expenses" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Get Expense",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/expenses/{{id_expense}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "expenses", "{{id_expense}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Update Expense",
+					"request": {
+						"method": "PUT",
+						"header": [ { "key": "Content-Type", "value": "application/json" } ],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"kategori\": \"Listrik\",\n  \"jumlah\": 275000,\n  \"deskripsi\": \"Tagihan listrik bulan ini (revisi)\",\n  \"tanggal\": \"2026-07-01\"\n}"
+						},
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/expenses/{{id_expense}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "expenses", "{{id_expense}}" ] }
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Expense",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": { "raw": "{{base_url}}/outlets/{{id_outlet}}/expenses/{{id_expense}}", "host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "expenses", "{{id_expense}}" ] }
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Report",
+			"item": [
+				{
+					"name": "Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/outlets/{{id_outlet}}/reports/transactions?status_pesanan=&status_pembayaran=&tanggal_mulai=&tanggal_akhir=&page=1&per_page=15",
+							"host": [ "{{base_url}}" ], "path": [ "outlets", "{{id_outlet}}", "reports", "transactions" ],
+							"query": [
+								{ "key": "status_pesanan", "value": "" },
+								{ "key": "status_pembayaran", "value": "" },
+								{ "key": "tanggal_mulai", "value": "" },
+								{ "key": "tanggal_akhir", "value": "" },
+								{ "key": "page", "value": "1" },
+								{ "key": "per_page", "value": "15" }
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
