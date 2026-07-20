@@ -3,9 +3,9 @@
 package controllers
 
 import (
-	"sso-service/common/response"
-	"sso-service/domain/dto"
-	"sso-service/services"
+	"laundry-service/common/response"
+	"laundry-service/domain/dto"
+	"laundry-service/services"
 
 	"github.com/gofiber/fiber/v2"
 )

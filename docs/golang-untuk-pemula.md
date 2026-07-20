@@ -35,24 +35,24 @@ package osce
 
 import (
 	"context"
-	"sso-service/common/response"
-	dtos "sso-service/domain/dto/osce"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	dtos "laundry-service/domain/dto/osce"
+	"laundry-service/repositories"
 )
 ```
 
-Perhatikan: folder `services/osce` dan `repositories/osce` **sama-sama** bernama package `osce`. Ini boleh saja karena mereka ada di path import yang berbeda (`sso-service/services/osce` vs `sso-service/repositories/osce`). Saat dipakai bareng di file lain, salah satunya harus diberi alias supaya tidak bentrok — itu sebabnya di `routes/osce/station.go` domain DTO diimpor sebagai:
+Perhatikan: folder `services/osce` dan `repositories/osce` **sama-sama** bernama package `osce`. Ini boleh saja karena mereka ada di path import yang berbeda (`laundry-service/services/osce` vs `laundry-service/repositories/osce`). Saat dipakai bareng di file lain, salah satunya harus diberi alias supaya tidak bentrok — itu sebabnya di `routes/osce/station.go` domain DTO diimpor sebagai:
 
 ```go
 import (
-	"sso-service/domain/dto/osce" // dipakai langsung sebagai osce.TipeStationForm
+	"laundry-service/domain/dto/osce" // dipakai langsung sebagai osce.TipeStationForm
 )
 ```
 
 sedangkan di `services/osce/station.go` DTO yang sama diimpor dengan alias `dtos`:
 
 ```go
-dtos "sso-service/domain/dto/osce" // dipakai sebagai dtos.TipeStationForm
+dtos "laundry-service/domain/dto/osce" // dipakai sebagai dtos.TipeStationForm
 ```
 
 **Intinya:** nama package = nama folder secara konvensi, tapi path import yang membedakan satu package dengan package lain.

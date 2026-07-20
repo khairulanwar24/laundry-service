@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        GIT_URL            = 'http://gitlab.farmasiunissula.com/farmasi-unissula/sso-service.git'
+        GIT_URL            = 'http://gitlab.farmasiunissula.com/farmasi-unissula/laundry-service.git'
         GIT_CREDENTIALS_ID = 'gitlab-token'
-        DOCKER_IMAGE       = "registry.farmasiunissula.com/sso-service:latest"
+        DOCKER_IMAGE       = "registry.farmasiunissula.com/laundry-service:latest"
         GOPATH             = "/usr/local/go"
         PATH               = "/usr/local/go/bin:$PATH"
         SWARM_MANAGER      = "192.168.20.40"
@@ -26,8 +26,8 @@ pipeline {
                     env.ENV_FILE = isMainBranch ? 'app/.env_prod' : 'app/.env_dev'
                     env.ENV = isMainBranch ? 'production' : 'development'
                     env.DOCKER_IMAGE = isMainBranch ? 
-                        "registry.farmasiunissula.com/sso-service:latest" : 
-                        "registry.farmasiunissula.com/sso-service:${env.BRANCH_NAME.replaceAll('/', '-')}"
+                        "registry.farmasiunissula.com/laundry-service:latest" : 
+                        "registry.farmasiunissula.com/laundry-service:${env.BRANCH_NAME.replaceAll('/', '-')}"
                     
                     echo "Using env file: ${env.ENV_FILE}"
 
@@ -128,13 +128,13 @@ pipeline {
                 script {
                     sh """
                     ssh -i ~/.ssh/id_rsa -o BatchMode=yes debian@${SWARM_MANAGER} -p 2215 \\
-                    "docker service update --image $DOCKER_IMAGE sso-service || \\
-                    docker service create --name sso-service --replicas 3 \\
+                    "docker service update --image $DOCKER_IMAGE laundry-service || \\
+                    docker service create --name laundry-service --replicas 3 \\
                     --publish ${HTTP_PORT}:${HTTP_PORT} \\
                     --env-file /home/debian/.env \\
                     $DOCKER_IMAGE && \\
                     docker service ls && \\
-                    docker service ps sso-service"
+                    docker service ps laundry-service"
                     """
                 }
             }

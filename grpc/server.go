@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	middleware "sso-service/middlewares"
-	pb "sso-service/proto" // Import file proto yang dihasilkan
+	middleware "laundry-service/middlewares"
+	pb "laundry-service/proto" // Import file proto yang dihasilkan
 )
 
 type AuthServiceServer struct {

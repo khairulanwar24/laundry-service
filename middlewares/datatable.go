@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"sso-service/database"
+	"laundry-service/database"
 	"strconv"
 )
 
-// import middleware "sso-service/middlewares"
+// import middleware "laundry-service/middlewares"
 
 func Datatables(sRecursive, sTable, order, sFilter string, limit, offset int) map[string]interface{} {
 

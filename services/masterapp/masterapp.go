@@ -5,8 +5,8 @@ import (
 	"context"
 	"time"
 
-	"sso-service/common/response"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	"laundry-service/repositories"
 )
 
 // MasterAppService membungkus akses ke repository registry.

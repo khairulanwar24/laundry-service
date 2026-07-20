@@ -4,9 +4,9 @@ package osce
 import (
 	"context"
 	"math"
-	"sso-service/common/response"
-	dtos "sso-service/domain/dto/osce"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	dtos "laundry-service/domain/dto/osce"
+	"laundry-service/repositories"
 )
 
 // OsceAssessmentService membungkus repository registry.

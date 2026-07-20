@@ -4,14 +4,14 @@
 package controllers
 
 import (
-	authController "sso-service/controllers/auth"
-	groupAksesController "sso-service/controllers/groupakses"
-	masterAppController "sso-service/controllers/masterapp"
-	mstMenuController "sso-service/controllers/mstmenu"
-	osceController "sso-service/controllers/osce"
-	refController "sso-service/controllers/ref"
-	userController "sso-service/controllers/user"
-	"sso-service/services"
+	authController "laundry-service/controllers/auth"
+	groupAksesController "laundry-service/controllers/groupakses"
+	masterAppController "laundry-service/controllers/masterapp"
+	mstMenuController "laundry-service/controllers/mstmenu"
+	osceController "laundry-service/controllers/osce"
+	refController "laundry-service/controllers/ref"
+	userController "laundry-service/controllers/user"
+	"laundry-service/services"
 )
 
 // Registry menyimpan service registry sebagai dependency.

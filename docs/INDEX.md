@@ -1,4 +1,4 @@
-# Dokumentasi SSO Service (ios-service)
+# Dokumentasi SSO Service (laundry-service)
 
 > **Microservice Single Sign-On** — autentikasi, otorisasi, manajemen user, aplikasi, menu, modul, dan group akses untuk ekosistem Farmasi UNISSULA.
 

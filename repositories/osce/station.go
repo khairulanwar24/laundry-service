@@ -3,7 +3,7 @@ package osce
 
 import (
 	"context"
-	"sso-service/domain/dto/osce"
+	"laundry-service/domain/dto/osce"
 
 	"gorm.io/gorm"
 )

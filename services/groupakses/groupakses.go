@@ -4,8 +4,8 @@ package services
 import (
 	"context"
 
-	"sso-service/common/response"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	"laundry-service/repositories"
 )
 
 // GroupAksesService membungkus akses ke repository registry.

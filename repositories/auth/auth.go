@@ -5,7 +5,7 @@ import (
 	"context"
 	"time"
 
-	"sso-service/domain/dto"
+	"laundry-service/domain/dto"
 
 	"gorm.io/gorm"
 )

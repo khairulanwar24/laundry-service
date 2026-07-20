@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	middleware "sso-service/middlewares"
+	middleware "laundry-service/middlewares"
 
 	"gorm.io/gorm"
 )

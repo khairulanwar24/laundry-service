@@ -6,8 +6,8 @@ import (
 	"context"
 	"strings"
 
-	"sso-service/domain/dto"
-	middleware "sso-service/middlewares"
+	"laundry-service/domain/dto"
+	middleware "laundry-service/middlewares"
 
 	"gorm.io/gorm"
 )

@@ -5,7 +5,7 @@ import (
 	"context"
 	"strings"
 
-	middleware "sso-service/middlewares"
+	middleware "laundry-service/middlewares"
 
 	"gorm.io/gorm"
 )

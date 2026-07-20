@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"time"
 
-	"sso-service/common/response"
-	middleware "sso-service/middlewares"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	middleware "laundry-service/middlewares"
+	"laundry-service/repositories"
 )
 
 // AuthService membungkus akses ke repository registry.

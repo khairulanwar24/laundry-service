@@ -235,7 +235,7 @@ Middleware (`validation.go`, `jwt.go`) masih menggunakan `types.Response`. Perlu
 | `app/.env_dev` | Template env development |
 | `app/.env_prod` | Template env production |
 | `Dockerfile` | Build container (multi-stage) |
-| `sso-service.dockerfile` | Alternate dockerfile |
+| `laundry-service.dockerfile` | Alternate dockerfile |
 | `docker-compose.yml` | Local dev setup |
 | `jenkinsfile` | CI/CD pipeline |
 | `makefile` | Shortcut commands |

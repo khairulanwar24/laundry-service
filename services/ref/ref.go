@@ -4,7 +4,7 @@ package services
 import (
 	"context"
 
-	"sso-service/repositories"
+	"laundry-service/repositories"
 )
 
 // RefService membungkus akses ke repository registry.

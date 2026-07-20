@@ -4,14 +4,14 @@
 package routes
 
 import (
-	"sso-service/controllers"
-	authRoute "sso-service/routes/auth"
-	groupAksesRoute "sso-service/routes/groupakses"
-	masterAppRoute "sso-service/routes/masterapp"
-	mstMenuRoute "sso-service/routes/mstmenu"
-	osceRoute "sso-service/routes/osce"
-	refRoute "sso-service/routes/ref"
-	userRoute "sso-service/routes/user"
+	"laundry-service/controllers"
+	authRoute "laundry-service/routes/auth"
+	groupAksesRoute "laundry-service/routes/groupakses"
+	masterAppRoute "laundry-service/routes/masterapp"
+	mstMenuRoute "laundry-service/routes/mstmenu"
+	osceRoute "laundry-service/routes/osce"
+	refRoute "laundry-service/routes/ref"
+	userRoute "laundry-service/routes/user"
 
 	"github.com/gofiber/fiber/v2"
 )

@@ -1,4 +1,4 @@
-module sso-service
+module laundry-service
 
 go 1.23.0
 

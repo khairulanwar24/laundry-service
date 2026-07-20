@@ -2,8 +2,8 @@
 package osce
 
 import (
-	"sso-service/domain/dto/osce"
-	"sso-service/services"
+	"laundry-service/domain/dto/osce"
+	"laundry-service/services"
 
 	"github.com/gofiber/fiber/v2"
 )

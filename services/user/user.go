@@ -5,10 +5,10 @@ package services
 import (
 	"context"
 
-	"sso-service/common/response"
-	"sso-service/domain/dto"
-	middleware "sso-service/middlewares"
-	"sso-service/repositories"
+	"laundry-service/common/response"
+	"laundry-service/domain/dto"
+	middleware "laundry-service/middlewares"
+	"laundry-service/repositories"
 )
 
 // UserService membungkus akses ke repository registry.

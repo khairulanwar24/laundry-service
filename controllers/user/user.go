@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strconv"
 
-	"sso-service/domain/dto"
-	middleware "sso-service/middlewares"
-	"sso-service/services"
+	"laundry-service/domain/dto"
+	middleware "laundry-service/middlewares"
+	"laundry-service/services"
 
 	"github.com/gofiber/fiber/v2"
 )

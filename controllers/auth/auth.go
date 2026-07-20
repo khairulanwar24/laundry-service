@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
-	"sso-service/common/response"
-	"sso-service/domain/dto"
-	middleware "sso-service/middlewares"
-	"sso-service/services"
+	"laundry-service/common/response"
+	"laundry-service/domain/dto"
+	middleware "laundry-service/middlewares"
+	"laundry-service/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"

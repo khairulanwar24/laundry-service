@@ -1,12 +1,12 @@
 # version: "3.7"
 
 services:
-  sso-service:
-    image: sso-service:latest
+  laundry-service:
+    image: laundry-service:latest
     build:
       context: .
-      dockerfile: ./sso-service.dockerfile
-    container_name: sso-service
+      dockerfile: ./laundry-service.dockerfile
+    container_name: laundry-service
     environment:
       - SSO_ENV_VARIABLE_1=value1
       - SSO_ENV_VARIABLE_2=value2

@@ -3,7 +3,7 @@
 ## Struktur Folder
 
 ```
-ios-service/
+laundry-service/
 ├── main.go                     # Entry point: inisialisasi DB, registry, gRPC, HTTP server
 ├── app/.env                    # Environment variables
 ├── config/                     # Konfigurasi database (3 koneksi: SSO, Akademik, Digiclass)

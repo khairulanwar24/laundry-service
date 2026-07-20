@@ -25,6 +25,6 @@ down:
 ## build_auth: builds the auth binary as a linux executable
 build_sso:
 	@echo "Building auth binary..."
-	cd ../sso-service && bash -c source /etc/profile && env GOOS=linux CGO_ENABLED=0 go build -o  ${SSO_BINARY} ./
+	cd ../laundry-service && bash -c source /etc/profile && env GOOS=linux CGO_ENABLED=0 go build -o  ${SSO_BINARY} ./
 	@echo "Done!"
 

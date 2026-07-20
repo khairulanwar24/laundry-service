@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"sso-service/config"
+	"laundry-service/config"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

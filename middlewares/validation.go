@@ -3,7 +3,7 @@ package middleware
 import (
 	"errors"
 	"reflect"
-	"sso-service/types"
+	"laundry-service/types"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"

@@ -2,14 +2,14 @@
 package services
 
 import (
-	"sso-service/repositories"
-	authService "sso-service/services/auth"
-	groupAksesService "sso-service/services/groupakses"
-	masterAppService "sso-service/services/masterapp"
-	mstMenuService "sso-service/services/mstmenu"
-	osceService "sso-service/services/osce"
-	refService "sso-service/services/ref"
-	userService "sso-service/services/user"
+	"laundry-service/repositories"
+	authService "laundry-service/services/auth"
+	groupAksesService "laundry-service/services/groupakses"
+	masterAppService "laundry-service/services/masterapp"
+	mstMenuService "laundry-service/services/mstmenu"
+	osceService "laundry-service/services/osce"
+	refService "laundry-service/services/ref"
+	userService "laundry-service/services/user"
 )
 
 // Registry menyimpan repository registry sebagai dependency.

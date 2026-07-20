@@ -2,9 +2,9 @@
 package routes
 
 import (
-	"sso-service/controllers"
-	"sso-service/domain/dto"
-	middleware "sso-service/middlewares"
+	"laundry-service/controllers"
+	"laundry-service/domain/dto"
+	middleware "laundry-service/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 )

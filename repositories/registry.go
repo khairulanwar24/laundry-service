@@ -3,18 +3,18 @@
 package repositories
 
 import (
-	authRepo "sso-service/repositories/auth"
-	groupAksesRepo "sso-service/repositories/groupakses"
-	masterAppRepo "sso-service/repositories/masterapp"
-	mstMenuRepo "sso-service/repositories/mstmenu"
-	osceRepo "sso-service/repositories/osce"
-	refRepo "sso-service/repositories/ref"
-	userRepo "sso-service/repositories/user"
+	authRepo "laundry-service/repositories/auth"
+	groupAksesRepo "laundry-service/repositories/groupakses"
+	masterAppRepo "laundry-service/repositories/masterapp"
+	mstMenuRepo "laundry-service/repositories/mstmenu"
+	osceRepo "laundry-service/repositories/osce"
+	refRepo "laundry-service/repositories/ref"
+	userRepo "laundry-service/repositories/user"
 
 	"gorm.io/gorm"
 )
 
-// Registry adalah wadah koneksi database. ios-service memakai 3 koneksi:
+// Registry adalah wadah koneksi database. laundry-service memakai 3 koneksi:
 //   - db          : database utama (sso / public)
 //   - dbAkademik  : database akademik
 //   - dbDigiclass : database digiclass

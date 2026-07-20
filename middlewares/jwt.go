@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"sso-service/types"
+	"laundry-service/types"
 	"strings"
 	"time"
 

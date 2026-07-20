@@ -4,19 +4,19 @@ import (
 	"log"
 	"net"
 	"os"
-	"sso-service/controllers"
-	"sso-service/database"
-	"sso-service/repositories"
-	"sso-service/services"
+	"laundry-service/controllers"
+	"laundry-service/database"
+	"laundry-service/repositories"
+	"laundry-service/services"
 
-	grpcsso "sso-service/grpc"
-	"sso-service/routes"
+	grpcsso "laundry-service/grpc"
+	"laundry-service/routes"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 
-	pb "sso-service/proto" // Import file proto yang dihasilkan
+	pb "laundry-service/proto" // Import file proto yang dihasilkan
 
 	"google.golang.org/grpc"
 )
