@@ -5,6 +5,7 @@ import (
 	"laundry-service/repositories"
 	accountService "laundry-service/services/account"
 	catalogService "laundry-service/services/catalog"
+	customerService "laundry-service/services/customer"
 	outletService "laundry-service/services/outlet"
 	paymentMethodService "laundry-service/services/paymentmethod"
 )
@@ -23,6 +24,7 @@ type IServiceRegistry interface {
 	GetServiceVariant() catalogService.IServiceVariantService
 	GetPerfume() catalogService.IPerfumeService
 	GetDiscount() catalogService.IDiscountService
+	GetCustomer() customerService.ICustomerService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -63,4 +65,9 @@ func (r *Registry) GetPerfume() catalogService.IPerfumeService {
 // GetDiscount mengembalikan service diskon.
 func (r *Registry) GetDiscount() catalogService.IDiscountService {
 	return catalogService.NewDiscountService(r.repository)
+}
+
+// GetCustomer mengembalikan service pelanggan.
+func (r *Registry) GetCustomer() customerService.ICustomerService {
+	return customerService.NewCustomerService(r.repository)
 }
