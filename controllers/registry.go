@@ -3,6 +3,7 @@ package controllers
 
 import (
 	accountController "laundry-service/controllers/account"
+	catalogController "laundry-service/controllers/catalog"
 	outletController "laundry-service/controllers/outlet"
 	paymentMethodController "laundry-service/controllers/paymentmethod"
 	"laundry-service/services"
@@ -18,6 +19,10 @@ type IControllerRegistry interface {
 	GetAccount() accountController.IAccountController
 	GetOutlet() outletController.IOutletController
 	GetPaymentMethod() paymentMethodController.IPaymentMethodController
+	GetService() catalogController.IServiceController
+	GetServiceVariant() catalogController.IServiceVariantController
+	GetPerfume() catalogController.IPerfumeController
+	GetDiscount() catalogController.IDiscountController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -38,4 +43,24 @@ func (r *Registry) GetOutlet() outletController.IOutletController {
 // GetPaymentMethod mengembalikan controller metode pembayaran.
 func (r *Registry) GetPaymentMethod() paymentMethodController.IPaymentMethodController {
 	return paymentMethodController.NewPaymentMethodController(r.service)
+}
+
+// GetService mengembalikan controller layanan.
+func (r *Registry) GetService() catalogController.IServiceController {
+	return catalogController.NewServiceController(r.service)
+}
+
+// GetServiceVariant mengembalikan controller varian layanan.
+func (r *Registry) GetServiceVariant() catalogController.IServiceVariantController {
+	return catalogController.NewServiceVariantController(r.service)
+}
+
+// GetPerfume mengembalikan controller parfum.
+func (r *Registry) GetPerfume() catalogController.IPerfumeController {
+	return catalogController.NewPerfumeController(r.service)
+}
+
+// GetDiscount mengembalikan controller diskon.
+func (r *Registry) GetDiscount() catalogController.IDiscountController {
+	return catalogController.NewDiscountController(r.service)
 }

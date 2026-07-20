@@ -4,6 +4,7 @@ package services
 import (
 	"laundry-service/repositories"
 	accountService "laundry-service/services/account"
+	catalogService "laundry-service/services/catalog"
 	outletService "laundry-service/services/outlet"
 	paymentMethodService "laundry-service/services/paymentmethod"
 )
@@ -18,6 +19,10 @@ type IServiceRegistry interface {
 	GetAccount() accountService.IAccountService
 	GetOutlet() outletService.IOutletService
 	GetPaymentMethod() paymentMethodService.IPaymentMethodService
+	GetService() catalogService.IServiceService
+	GetServiceVariant() catalogService.IServiceVariantService
+	GetPerfume() catalogService.IPerfumeService
+	GetDiscount() catalogService.IDiscountService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -38,4 +43,24 @@ func (r *Registry) GetOutlet() outletService.IOutletService {
 // GetPaymentMethod mengembalikan service metode pembayaran.
 func (r *Registry) GetPaymentMethod() paymentMethodService.IPaymentMethodService {
 	return paymentMethodService.NewPaymentMethodService(r.repository)
+}
+
+// GetService mengembalikan service layanan.
+func (r *Registry) GetService() catalogService.IServiceService {
+	return catalogService.NewServiceService(r.repository)
+}
+
+// GetServiceVariant mengembalikan service varian layanan.
+func (r *Registry) GetServiceVariant() catalogService.IServiceVariantService {
+	return catalogService.NewServiceVariantService(r.repository)
+}
+
+// GetPerfume mengembalikan service parfum.
+func (r *Registry) GetPerfume() catalogService.IPerfumeService {
+	return catalogService.NewPerfumeService(r.repository)
+}
+
+// GetDiscount mengembalikan service diskon.
+func (r *Registry) GetDiscount() catalogService.IDiscountService {
+	return catalogService.NewDiscountService(r.repository)
 }

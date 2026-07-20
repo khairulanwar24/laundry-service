@@ -3,6 +3,7 @@ package repositories
 
 import (
 	accountRepo "laundry-service/repositories/account"
+	catalogRepo "laundry-service/repositories/catalog"
 	outletRepo "laundry-service/repositories/outlet"
 	paymentMethodRepo "laundry-service/repositories/paymentmethod"
 
@@ -19,6 +20,10 @@ type IRepositoryRegistry interface {
 	GetAccount() accountRepo.IAccountRepository
 	GetOutlet() outletRepo.IOutletRepository
 	GetPaymentMethod() paymentMethodRepo.IPaymentMethodRepository
+	GetService() catalogRepo.IServiceRepository
+	GetServiceVariant() catalogRepo.IServiceVariantRepository
+	GetPerfume() catalogRepo.IPerfumeRepository
+	GetDiscount() catalogRepo.IDiscountRepository
 }
 
 // NewRepositoryRegistry membuat repository registry baru.
@@ -39,4 +44,24 @@ func (r *Registry) GetOutlet() outletRepo.IOutletRepository {
 // GetPaymentMethod mengembalikan repository metode pembayaran.
 func (r *Registry) GetPaymentMethod() paymentMethodRepo.IPaymentMethodRepository {
 	return paymentMethodRepo.NewPaymentMethodRepository(r.db)
+}
+
+// GetService mengembalikan repository layanan.
+func (r *Registry) GetService() catalogRepo.IServiceRepository {
+	return catalogRepo.NewServiceRepository(r.db)
+}
+
+// GetServiceVariant mengembalikan repository varian layanan.
+func (r *Registry) GetServiceVariant() catalogRepo.IServiceVariantRepository {
+	return catalogRepo.NewServiceVariantRepository(r.db)
+}
+
+// GetPerfume mengembalikan repository parfum.
+func (r *Registry) GetPerfume() catalogRepo.IPerfumeRepository {
+	return catalogRepo.NewPerfumeRepository(r.db)
+}
+
+// GetDiscount mengembalikan repository diskon.
+func (r *Registry) GetDiscount() catalogRepo.IDiscountRepository {
+	return catalogRepo.NewDiscountRepository(r.db)
 }

@@ -4,6 +4,7 @@ package routes
 import (
 	"laundry-service/controllers"
 	accountRoute "laundry-service/routes/account"
+	catalogRoute "laundry-service/routes/catalog"
 	outletRoute "laundry-service/routes/outlet"
 	paymentMethodRoute "laundry-service/routes/paymentmethod"
 
@@ -31,6 +32,7 @@ func (r *Registry) Serve() {
 	r.accountRoute().Run()
 	r.outletRoute().Run()
 	r.paymentMethodRoute().Run()
+	r.catalogRoute().Run()
 }
 
 func (r *Registry) accountRoute() accountRoute.IAccountRoute {
@@ -43,4 +45,8 @@ func (r *Registry) outletRoute() outletRoute.IOutletRoute {
 
 func (r *Registry) paymentMethodRoute() paymentMethodRoute.IPaymentMethodRoute {
 	return paymentMethodRoute.NewPaymentMethodRoute(r.controller, r.router)
+}
+
+func (r *Registry) catalogRoute() catalogRoute.ICatalogRoute {
+	return catalogRoute.NewCatalogRoute(r.controller, r.router)
 }
