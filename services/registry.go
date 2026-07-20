@@ -6,6 +6,7 @@ import (
 	accountService "laundry-service/services/account"
 	catalogService "laundry-service/services/catalog"
 	customerService "laundry-service/services/customer"
+	dashboardService "laundry-service/services/dashboard"
 	orderService "laundry-service/services/order"
 	outletService "laundry-service/services/outlet"
 	paymentMethodService "laundry-service/services/paymentmethod"
@@ -27,6 +28,7 @@ type IServiceRegistry interface {
 	GetDiscount() catalogService.IDiscountService
 	GetCustomer() customerService.ICustomerService
 	GetOrder() orderService.IOrderService
+	GetDashboard() dashboardService.IDashboardService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -77,4 +79,9 @@ func (r *Registry) GetCustomer() customerService.ICustomerService {
 // GetOrder mengembalikan service pesanan.
 func (r *Registry) GetOrder() orderService.IOrderService {
 	return orderService.NewOrderService(r.repository)
+}
+
+// GetDashboard mengembalikan service dashboard.
+func (r *Registry) GetDashboard() dashboardService.IDashboardService {
+	return dashboardService.NewDashboardService(r.repository)
 }

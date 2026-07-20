@@ -6,6 +6,7 @@ import (
 	accountRoute "laundry-service/routes/account"
 	catalogRoute "laundry-service/routes/catalog"
 	customerRoute "laundry-service/routes/customer"
+	dashboardRoute "laundry-service/routes/dashboard"
 	orderRoute "laundry-service/routes/order"
 	outletRoute "laundry-service/routes/outlet"
 	paymentMethodRoute "laundry-service/routes/paymentmethod"
@@ -37,6 +38,7 @@ func (r *Registry) Serve() {
 	r.catalogRoute().Run()
 	r.customerRoute().Run()
 	r.orderRoute().Run()
+	r.dashboardRoute().Run()
 }
 
 func (r *Registry) accountRoute() accountRoute.IAccountRoute {
@@ -61,4 +63,8 @@ func (r *Registry) customerRoute() customerRoute.ICustomerRoute {
 
 func (r *Registry) orderRoute() orderRoute.IOrderRoute {
 	return orderRoute.NewOrderRoute(r.controller, r.router)
+}
+
+func (r *Registry) dashboardRoute() dashboardRoute.IDashboardRoute {
+	return dashboardRoute.NewDashboardRoute(r.controller, r.router)
 }

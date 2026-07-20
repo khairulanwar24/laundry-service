@@ -5,6 +5,7 @@ import (
 	accountController "laundry-service/controllers/account"
 	catalogController "laundry-service/controllers/catalog"
 	customerController "laundry-service/controllers/customer"
+	dashboardController "laundry-service/controllers/dashboard"
 	orderController "laundry-service/controllers/order"
 	outletController "laundry-service/controllers/outlet"
 	paymentMethodController "laundry-service/controllers/paymentmethod"
@@ -27,6 +28,7 @@ type IControllerRegistry interface {
 	GetDiscount() catalogController.IDiscountController
 	GetCustomer() customerController.ICustomerController
 	GetOrder() orderController.IOrderController
+	GetDashboard() dashboardController.IDashboardController
 }
 
 // NewControllerRegistry membuat controller registry baru.
@@ -77,4 +79,9 @@ func (r *Registry) GetCustomer() customerController.ICustomerController {
 // GetOrder mengembalikan controller pesanan.
 func (r *Registry) GetOrder() orderController.IOrderController {
 	return orderController.NewOrderController(r.service)
+}
+
+// GetDashboard mengembalikan controller dashboard.
+func (r *Registry) GetDashboard() dashboardController.IDashboardController {
+	return dashboardController.NewDashboardController(r.service)
 }
