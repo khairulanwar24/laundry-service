@@ -11,6 +11,7 @@ import (
 	orderRoute "laundry-service/routes/order"
 	outletRoute "laundry-service/routes/outlet"
 	paymentMethodRoute "laundry-service/routes/paymentmethod"
+	reportRoute "laundry-service/routes/report"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -41,6 +42,7 @@ func (r *Registry) Serve() {
 	r.orderRoute().Run()
 	r.dashboardRoute().Run()
 	r.expenseRoute().Run()
+	r.reportRoute().Run()
 }
 
 func (r *Registry) accountRoute() accountRoute.IAccountRoute {
@@ -73,4 +75,8 @@ func (r *Registry) dashboardRoute() dashboardRoute.IDashboardRoute {
 
 func (r *Registry) expenseRoute() expenseRoute.IExpenseRoute {
 	return expenseRoute.NewExpenseRoute(r.controller, r.router)
+}
+
+func (r *Registry) reportRoute() reportRoute.IReportRoute {
+	return reportRoute.NewReportRoute(r.controller, r.router)
 }

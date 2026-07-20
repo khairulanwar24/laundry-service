@@ -10,6 +10,7 @@ import (
 	orderRepo "laundry-service/repositories/order"
 	outletRepo "laundry-service/repositories/outlet"
 	paymentMethodRepo "laundry-service/repositories/paymentmethod"
+	reportRepo "laundry-service/repositories/report"
 
 	"gorm.io/gorm"
 )
@@ -32,6 +33,7 @@ type IRepositoryRegistry interface {
 	GetOrder() orderRepo.IOrderRepository
 	GetDashboard() dashboardRepo.IDashboardRepository
 	GetExpense() expenseRepo.IExpenseRepository
+	GetReport() reportRepo.IReportRepository
 }
 
 // NewRepositoryRegistry membuat repository registry baru.
@@ -92,4 +94,9 @@ func (r *Registry) GetDashboard() dashboardRepo.IDashboardRepository {
 // GetExpense mengembalikan repository pengeluaran.
 func (r *Registry) GetExpense() expenseRepo.IExpenseRepository {
 	return expenseRepo.NewExpenseRepository(r.db)
+}
+
+// GetReport mengembalikan repository laporan.
+func (r *Registry) GetReport() reportRepo.IReportRepository {
+	return reportRepo.NewReportRepository(r.db)
 }

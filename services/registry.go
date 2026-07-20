@@ -11,6 +11,7 @@ import (
 	orderService "laundry-service/services/order"
 	outletService "laundry-service/services/outlet"
 	paymentMethodService "laundry-service/services/paymentmethod"
+	reportService "laundry-service/services/report"
 )
 
 // Registry menyimpan repository registry sebagai dependency.
@@ -31,6 +32,7 @@ type IServiceRegistry interface {
 	GetOrder() orderService.IOrderService
 	GetDashboard() dashboardService.IDashboardService
 	GetExpense() expenseService.IExpenseService
+	GetReport() reportService.IReportService
 }
 
 // NewServiceRegistry membuat service registry baru.
@@ -91,4 +93,9 @@ func (r *Registry) GetDashboard() dashboardService.IDashboardService {
 // GetExpense mengembalikan service pengeluaran.
 func (r *Registry) GetExpense() expenseService.IExpenseService {
 	return expenseService.NewExpenseService(r.repository)
+}
+
+// GetReport mengembalikan service laporan.
+func (r *Registry) GetReport() reportService.IReportService {
+	return reportService.NewReportService(r.repository)
 }
